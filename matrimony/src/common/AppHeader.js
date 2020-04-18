@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link, NavLink,BrowserRouter } from 'react-router-dom';
-import './AppHeader.css';
+
 import PropTypes from 'prop-types';
 
 import Menu, { SubMenu, Item as MenuItem, Divider } from 'rc-menu';
-import 'rc-menu/assets/index.css';
+// import 'rc-menu/assets/index.css';
 
 
 
@@ -379,120 +379,82 @@ class AppHeader extends Component {
     render() {
         return (
     <React.Fragment>
-    <div className="main">
-      <div className="nav-area">
-        <section className="top_section">
-          <div className="container">
-            <div className="row display-none">
-              <div className="col-md-6 col-sm-4 col-xs-12">
-                <div className="single">
-                  <form action="newsletter.html" method="get" >
-                    <div className="input-group">
-                      <input type="email" className="form-control" name="emailId" id="emailId" placeholder="Enter Your Email Id" />
-                      <span className="input-group-btn">
-                      <button className="btn btn-theme" type="submit">SUBSCRIBE</button>
-                      </span>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div className="col-md-4 col-sm-6 col-xs-12">
-                <div className="hd_right">
-                  <ul>
-                  <li><a href="https://www.facebook.com/giftinglifefoundationindia.org"><i className="fa fa-facebook-official" aria-hidden="true"></i></a></li>
-                    <li><a href="https://twitter.com/giftinglifefoundation"><i className="fa fa-twitter-square" aria-hidden="true"></i></a></li>
-                    <li><a href="https://www.youtube.com/user/tubeforchange"><i className="fa fa-youtube-square" aria-hidden="true"></i></a></li>
-                    <li><a href="mailto:yours@email.com?Subject=Please check this site"><i className="fa fa-envelope" aria-hidden="true"></i></a></li>
-                    <li><a href="https://www.linkedin.com/company/smile-foundation"><i className="fa fa-linkedin-square" aria-hidden="true"></i></a></li>
-                    <li><a href="https://www.instagram.com/giftinglifefoundationindia/"><img src="images/instagram.png" style={{"width" : "22px"}} /></a></li>
-                    <li><a href="http://www.giftinglifefoundationindia.org/blog/" ><img src="images/blogger-logo.png" style={{"width" : "22px"}} /></a></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-2 col-sm-6">
-                <div className="donate">
-                DONATE Coming soon
-                  
-                </div>
-              </div>
-            </div>
-            <div className="row display-none-large-screen">
-              <div className="col-md-2 col-xs-4">
-                <div className="donate">
-                  <a href="http://www.giftinglifefoundationindia.org/register.asp" className="btn btn-details3 "><b>DONATE NOW</b></a>
-                </div>
-              </div>
-              <div className="col-xs-8">
-                <div className="hd_right">
-                  <ul>
-                    <li><a href="https://www.facebook.com/giftinglifefoundationindia.org"><i className="fa fa-facebook-official" aria-hidden="true"></i></a></li>
-                    <li><a href="https://twitter.com/giftinglifefoundation"><i className="fa fa-twitter-square" aria-hidden="true"></i></a></li>
-                    <li><a href="https://www.youtube.com/user/tubeforchange"><i className="fa fa-youtube-square" aria-hidden="true"></i></a></li>
-                    <li><a href="mailto:yours@email.com?Subject=Please check this site"><i className="fa fa-envelope" aria-hidden="true"></i></a></li>    
-                    <li><a href="https://www.linkedin.com/company/smile-foundation"><i className="fa fa-linkedin-square" aria-hidden="true"></i></a></li>
-                    <li><a href="https://www.instagram.com/giftinglifefoundationindia/"><img src="images/instagram.png" style={{"width" : "22px"}} /></a></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-xs-12 spacer-10">
-                <div className="single">
-                  <form action="newsletter.html" method="get" >
-                    <div className="input-group">
-                      <input type="email" className="form-control" name="emailId" id="emailId" placeholder="Enter Your Email Id" />
-                      <span className="input-group-btn">
-                      <button className="btn btn-theme" type="submit">SUBSCRIBE</button>
-                      </span>
-                    </div>
-                  </form>
-                </div>
-              </div>    
-            </div>
-          </div>
-        </section>
-      </div>
-      <nav className="navbar navbar-default">
+<div className="navbar navbar-inverse-blue navbar">
+      <div className="navbar-inner">
         <div className="container">
-          <div className="row">
-            <div className="navbar-header">
-              <a className="navbar-brand home" href="http://www.giftinglifefoundationindia.org/" data-animate-hover="bounce">
-                <div className="logo">
-                  <img src="images/cp/logo.png" className="img-responsive" alt="logo" />
-                </div>
-              </a>
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              </button>
-            </div>
-            {/* <jsp:include page="menu.jsp"></jsp:include> */}
-            { this.props.authenticated ? (
-                                  <React.Fragment>
-                                    <div style={{ padding: 0 }}>{horizontalMenu1}<a onClick={this.props.onLogout}>Logout</a></div>
-                                    
-                                  </React.Fragment>
-                                ): (
-                                  <React.Fragment>
-                                    <div style={{ padding: 0 }}>{horizontalMenu2}</div>
-                                    {/* <ul>
-                                       
-                                        <li>
-                                            <NavLink to="/login">Login</NavLink>        
-                                        </li>
-                                        <li>
-                                            <NavLink to="/signup">Signup</NavLink>        
-                                        </li>
-                                    </ul> */}
-                                  </React.Fragment>
-                                    
-                                )}
-          </div>
-        </div>
-      </nav>      
-    </div>
-    
-            </React.Fragment>
+           <div className="navigation">
+             <nav id="colorNav">
+			   <ul>
+				<li className="green">
+					<a href="#" className="icon-home"></a>
+          <ul>
+					<li><a href="login">Login</a></li>
+					<li><a href="signup">Register</a></li>
+					<li><a onClick={this.props.onLogout}>Logout</a></li>
+				  </ul>
+					 
+				</li>
+			   </ul>
+             </nav>
+           </div>
+           <a className="brand" href="index.html"><img src="images/logo.png" alt="logo"></img></a>
+           <div className="pull-right">
+          	<nav className="navbar nav_bottom" role="navigation">
+            
+		  <div className="navbar-header nav_2">
+		      <button type="button" className="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">Menu
+		        <span className="sr-only">Toggle navigation</span>
+		        <span className="icon-bar"></span>
+		        <span className="icon-bar"></span>
+		        <span className="icon-bar"></span>
+		      </button>
+		      <a className="navbar-brand" href="#"></a>
+		   </div> 
+		   
+		    <div className="collapse navbar-collapse" id="bs-megadropdown-tabs">
+		        <ul className="nav navbar-nav nav_1">
+		            <li><a href="/">Home</a></li>
+		            <li><a href="about.html">About</a></li>
+		    		<li className="dropdown">
+		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Matches<span className="caret"></span></a>
+		              <ul className="dropdown-menu" role="menu">
+		                <li><a href="matches.html">New Matches</a></li>
+		                <li><a href="viewed-profile.html">Who Viewed my Profile</a></li>
+		                <li><a href="viewed-not_contacted.html">Viewed & not Contacted</a></li>
+		                <li><a href="members.html">Premium Members</a></li>
+		                <li><a href="shortlisted.html">Shortlisted Profile</a></li>
+		              </ul>
+		            </li>
+					<li className="dropdown">
+		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Search<span className="caret"></span></a>
+		              <ul className="dropdown-menu" role="menu">
+		                <li><a href="search.html">Regular Search</a></li>
+		                <li><a href="profile.html">Recently Viewed Profiles</a></li>
+		                <li><a href="search-id.html">Search By Profile ID</a></li>
+		                <li><a href="faq.html">Faq</a></li>
+		                <li><a href="shortcodes.html">Shortcodes</a></li>
+		              </ul>
+		            </li>
+		            <li className="dropdown">
+		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Messages<span className="caret"></span></a>
+		              <ul className="dropdown-menu" role="menu">
+		                <li><a href="inbox.html">Inbox</a></li>
+		                <li><a href="inbox.html">New</a></li>
+		                <li><a href="inbox.html">Accepted</a></li>
+		                <li><a href="sent.html">Sent</a></li>
+		                <li><a href="upgrade.html">Upgrade</a></li>
+		              </ul>
+		            </li>
+		            <li className="last"><a href="contact.html">Contacts</a></li>
+		        </ul>
+		     </div>
+		    </nav>
+		   </div> 
+          <div className="clearfix"> </div>
+        </div> 
+      </div> 
+    </div>     
+    </React.Fragment>
         )
     }
 }

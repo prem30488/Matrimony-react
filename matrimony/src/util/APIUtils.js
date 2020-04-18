@@ -15,6 +15,7 @@ const request = (options) => {
     .then(response => 
         response.json().then(json => {
             console.log('json :',json);
+            console.log('response.ok',response.ok);
             if(!response.ok) {
                 return Promise.reject(json);
             }

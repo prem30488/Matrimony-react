@@ -19,17 +19,21 @@ class Signup extends Component {
         }
 
         return (
-            <div className="signup-container">
-                <div className="signup-content">
-                    <h1 className="signup-title">Signup with SpringSocial</h1>
-                    <SocialSignup />
-                    <div className="or-separator">
-                        <span className="or-text">OR</span>
-                    </div>
-                    <SignupForm {...this.props} />
-                    <span className="login-link">Already have an account?<BrowserRouter> <Link to="/login">Login!</Link></BrowserRouter></span>
-                </div>
-            </div>
+            <div className="services">
+   	  <div className="col-sm-6 login_left">
+	     <SignupForm {...this.props} />
+	  </div>
+	  <div className="col-sm-6">
+	     <ul className="sharing">
+			<li><a href="#" className="facebook" title="Facebook"><i className="fa fa-boxed fa-fw fa-facebook"></i> Share on Facebook</a></li>
+		  	<li><a href="#" className="twitter" title="Twitter"><i className="fa fa-boxed fa-fw fa-twitter"></i> Tweet</a></li>
+		  	<li><a href="#" className="google" title="Google"><i className="fa fa-boxed fa-fw fa-google-plus"></i> Share on Google+</a></li>
+		  	<li><a href="#" className="linkedin" title="Linkedin"><i className="fa fa-boxed fa-fw fa-linkedin"></i> Share on LinkedIn</a></li>
+		  	<li><a href="#" className="mail" title="Email"><i className="fa fa-boxed fa-fw fa-envelope-o"></i> E-mail</a></li>
+		 </ul>
+	  </div>
+	  <div className="clearfix"> </div>
+   </div>
         );
     }
 }
@@ -55,8 +59,12 @@ class SignupForm extends Component {
         super(props);
         this.state = {
             name: '',
+            username: '',
+            password: '',
             email: '',
-            password: ''
+            sex : '',
+            phoneNumber:'',
+            premium:false
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -72,11 +80,19 @@ class SignupForm extends Component {
         });        
     }
 
+    setGender(event) {
+        console.log(event.target.value);
+        this.setState({
+            sex: event.target.value
+            });
+      }
+
     handleSubmit(event) {
         event.preventDefault();   
 
         const signUpRequest = Object.assign({}, this.state);
-
+        console.log('event :',event);
+        console.log('signUpRequest :' , signUpRequest);
         signup(signUpRequest)
         .then(response => {
             Alert.success("You're successfully registered. Please login to continue!");
@@ -86,36 +102,51 @@ class SignupForm extends Component {
         });
     }
 
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <div className="form-item">
-                    <input type="text" name="name" 
-                        className="form-control" placeholder="Name"
-                        value={this.state.name} onChange={this.handleInputChange} required/>
+	  	    <div className="form-group">
+		      <label htmlFor="edit-name">Name <span className="form-required" title="This field is required.">*</span></label>
+		      <input type="text" id="edit-name" name="name" size="60" maxLength="60" className="form-text required"  value={this.state.name} onChange={this.handleInputChange} required/>
+		    </div>
+              <div className="form-group">
+		      <label htmlFor="edit-username">Username <span className="form-required" title="This field is required.">*</span></label>
+		      <input type="text" id="edit-username" name="username" size="60" maxLength="60" className="form-text required"  value={this.state.username} onChange={this.handleInputChange} required/>
+		    </div>
+		    <div className="form-group">
+		      <label htmlFor="edit-pass">Password <span className="form-required" title="This field is required.">*</span></label>
+		      <input type="password" id="edit-pass" name="password" size="60" maxLength="128" className="form-text required"  value={this.state.password} onChange={this.handleInputChange} required/>
+		    </div>
+		    <div className="form-group">
+		      <label htmlFor="edit-email">Email <span className="form-required" title="This field is required.">*</span></label>
+		      <input type="email" id="edit-email" name="email" size="60" maxLength="60" className="form-text required"  value={this.state.email} onChange={this.handleInputChange} required/>
+		    </div>
+		      <div className="form-group form-group1">
+                <label className="col-sm-7 control-lable" htmlFor="sex">Sex : </label>
+                <div className="col-sm-5">
+                    <div className="radios" onChange={this.setGender.bind(this)}>
+				        <label htmlFor="radio-01" className="label_radio">
+				            <input id="radio-01" defaultValue="MALE" name="sex" type="radio" onChange={this.setGender.bind(this)} /> Male
+				        </label>
+				        <label htmlFor="radio-02" className="label_radio">
+				            <input id="radio-02" defaultValue = "FEMALE" name="sex" type="radio" onChange={this.setGender.bind(this)}/> Female
+				        </label>
+	                </div>
                 </div>
-                <div className="form-item">
-                    <input type="text" name="username" 
-                        className="form-control" placeholder="Username"
-                        value={this.state.username} onChange={this.handleInputChange} required/>
-                </div>
-                <div className="form-item">
-                    <input type="email" name="email" 
-                        className="form-control" placeholder="Email"
-                        value={this.state.email} onChange={this.handleInputChange} required/>
-                </div>
-                <div className="form-item">
-                    <input type="password" name="password" 
-                        className="form-control" placeholder="Password"
-                        value={this.state.password} onChange={this.handleInputChange} required/>
-                </div>
-                <div className="form-item">
-                    <button type="submit" className="btn btn-block btn-primary" >Sign Up</button>
-                </div>
-            </form>                    
+                <div className="clearfix"> </div>
+             </div>
+			  <div className="form-group">
+			     <label htmlFor="edit-phoneNumber">Phone Number <span className="form-required" title="This field is required.">*</span></label>
+				 <input type="text" id="edit-phoneNumber" name="phoneNumber" size="60" maxLength="60" className="form-text required"  value={this.state.phoneNumber} onChange={this.handleInputChange} required />
+			  </div>
+			  <div className="form-actions">
+			    <input type="submit" id="edit-submit" name="op" value="Submit" className="btn_1 submit"/>
+			  </div>
+		 </form>                
 
         );
     }
 }
 
-export default Signup
+export default Signup;

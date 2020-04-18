@@ -14,7 +14,7 @@ class NotFound extends Component {
                 </div>
                 <BrowserRouter>
                 <Link to="/"><button className="go-back-btn btn btn-primary" type="button">Go Back</button></Link>
-                </BrowserRouter>
+                </BrowserRouter>    
             </div>
         );
     }

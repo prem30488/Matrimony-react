@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './Login.css';
+
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from '../../constants';
 import { login } from '../../util/APIUtils';
-import { Link, Redirect,BrowserRouter } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import fbLogo from '../../img/fb-logo.png';
 import googleLogo from '../../img/google-logo.png';
 import githubLogo from '../../img/github-logo.png';
@@ -35,17 +35,33 @@ class Login extends Component {
         }
 
         return (
-            <div className="login-container">
-                <div className="login-content">
-                    <h1 className="login-title">Login to SpringSocial</h1>
-                    <SocialLogin />
-                    <div className="or-separator">
-                        <span className="or-text">OR</span>
-                    </div>
-                    <LoginForm {...this.props} />
-                    <span className="signup-link">New user?<BrowserRouter> <Link to="/signup">Sign up!</Link></BrowserRouter></span>
-                </div>
-            </div>
+            <div className="grid_3">
+  <div className="container">
+   <div className="breadcrumb1">
+     <ul>
+        <a href="/signup"><i className="fa fa-home home_1"></i></a>
+        <span className="divider">&nbsp;|&nbsp;</span>
+        <li className="current-page">Login</li>
+     </ul>
+   </div>
+            <div className="services">
+   	  <div className="col-sm-6">
+         <LoginForm {...this.props} />
+	  </div>
+	  <div className="col-sm-6">
+	    <ul className="sharing">
+			<li><a href="#" className="facebook" title="Facebook"><i className="fa fa-boxed fa-fw fa-facebook"></i> Share on Facebook</a></li>
+		  	<li><a href="#" className="twitter" title="Twitter"><i className="fa fa-boxed fa-fw fa-twitter"></i> Tweet</a></li>
+		  	<li><a href="#" className="google" title="Google"><i className="fa fa-boxed fa-fw fa-google-plus"></i> Share on Google+</a></li>
+		  	<li><a href="#" className="linkedin" title="Linkedin"><i className="fa fa-boxed fa-fw fa-linkedin"></i> Share on LinkedIn</a></li>
+		  	<li><a href="#" className="mail" title="Email"><i className="fa fa-boxed fa-fw fa-envelope-o"></i> E-mail</a></li>
+		</ul>
+	  </div>
+	  <div className="clearfix"> </div>
+   </div>
+   </div>
+</div>
+
         );
     }
 }
@@ -66,7 +82,7 @@ export class SocialLogin extends Component {
 }
 
 
-class LoginForm extends Component {
+export class LoginForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -96,7 +112,7 @@ class LoginForm extends Component {
         .then(response => {
             localStorage.setItem(ACCESS_TOKEN, response.accessToken);
             Alert.success("You're successfully logged in!");
-            this.props.history.push("/home");
+            this.props.history.push("/Home");
             window.location.reload();
         }).catch(error => {
             Alert.error((error && error.message) || 'Oops! Something went wrong. Please try again!');
@@ -106,22 +122,24 @@ class LoginForm extends Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <div className="form-item">
-                    <input type="email" name="email" 
-                        className="form-control" placeholder="Email"
-                        value={this.state.email} onChange={this.handleInputChange} required/>
+                <div className="form-item form-type-textfield form-item-name">
+                <label htmlFor="edit-email">Email <span className="form-required" title="This field is required.">*</span></label>
+                    <input type="email" name="email" id="edit-email" 
+                        className="form-text required" placeholder="Email"
+                        value={this.state.email} onChange={this.handleInputChange} required />
                 </div>
-                <div className="form-item">
-                    <input type="password" name="password" 
-                        className="form-control" placeholder="Password"
+                <div className="form-item form-type-password form-item-pass">
+                <label htmlFor="edit-pass">Password <span className="form-required" title="This field is required.">*</span></label>
+                    <input type="password" name="password" id="edit-pass"
+                        className="form-text required" placeholder="Password"
                         value={this.state.password} onChange={this.handleInputChange} required/>
                 </div>
-                <div className="form-item">
-                    <button type="submit" className="btn btn-block btn-primary">Login</button>
+                <div className="form-actions">
+                    <button type="submit" id="edit-submit" className="btn_1 submit">Login</button>
                 </div>
             </form>                    
         );
     }
 }
 
-export default Login
+export default Login;
