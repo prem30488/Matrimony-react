@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Signup.css';
+//import './Signup.css';
 import { Link, Redirect,BrowserRouter } from 'react-router-dom'
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL, GITHUB_AUTH_URL } from '../../constants';
 import { signup } from '../../util/APIUtils';
@@ -19,6 +19,15 @@ class Signup extends Component {
         }
 
         return (
+            <div className="grid_3">
+            <div className="container">
+             <div className="breadcrumb1">
+               <ul>
+                  <a href="/signup"><i className="fa fa-home home_1"></i></a>
+                  <span className="divider">&nbsp;|&nbsp;</span>
+                  <li className="current-page">Registration</li>
+               </ul>
+             </div>
             <div className="services">
    	  <div className="col-sm-6 login_left">
 	     <SignupForm {...this.props} />
@@ -34,6 +43,7 @@ class Signup extends Component {
 	  </div>
 	  <div className="clearfix"> </div>
    </div>
+   </div></div>
         );
     }
 }
@@ -106,23 +116,23 @@ class SignupForm extends Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-	  	    <div className="form-group">
+	  	    <div className="form-item form-type-textfield form-item-name">
 		      <label htmlFor="edit-name">Name <span className="form-required" title="This field is required.">*</span></label>
 		      <input type="text" id="edit-name" name="name" size="60" maxLength="60" className="form-text required"  value={this.state.name} onChange={this.handleInputChange} required/>
 		    </div>
-              <div className="form-group">
+            <div className="form-item form-type-textfield form-item-name">
 		      <label htmlFor="edit-username">Username <span className="form-required" title="This field is required.">*</span></label>
 		      <input type="text" id="edit-username" name="username" size="60" maxLength="60" className="form-text required"  value={this.state.username} onChange={this.handleInputChange} required/>
 		    </div>
-		    <div className="form-group">
+		    <div className="form-item form-type-textfield form-item-name">
 		      <label htmlFor="edit-pass">Password <span className="form-required" title="This field is required.">*</span></label>
 		      <input type="password" id="edit-pass" name="password" size="60" maxLength="128" className="form-text required"  value={this.state.password} onChange={this.handleInputChange} required/>
 		    </div>
-		    <div className="form-group">
+		    <div className="form-item form-type-textfield form-item-name">
 		      <label htmlFor="edit-email">Email <span className="form-required" title="This field is required.">*</span></label>
 		      <input type="email" id="edit-email" name="email" size="60" maxLength="60" className="form-text required"  value={this.state.email} onChange={this.handleInputChange} required/>
 		    </div>
-		      <div className="form-group form-group1">
+            <div className="form-item form-type-textfield form-item-name">
                 <label className="col-sm-7 control-lable" htmlFor="sex">Sex : </label>
                 <div className="col-sm-5">
                     <div className="radios" onChange={this.setGender.bind(this)}>
@@ -136,7 +146,7 @@ class SignupForm extends Component {
                 </div>
                 <div className="clearfix"> </div>
              </div>
-			  <div className="form-group">
+             <div className="form-item form-type-textfield form-item-name">
 			     <label htmlFor="edit-phoneNumber">Phone Number <span className="form-required" title="This field is required.">*</span></label>
 				 <input type="text" id="edit-phoneNumber" name="phoneNumber" size="60" maxLength="60" className="form-text required"  value={this.state.phoneNumber} onChange={this.handleInputChange} required />
 			  </div>
