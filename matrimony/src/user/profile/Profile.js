@@ -42,8 +42,8 @@ function MyDropzone({id}) {
 class Profile extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
-        console.log(this.props.currentUser);
+        //console.log(props);
+        console.log("currentUser"+this.props);
         this.state = {
             data : ''
         }
@@ -70,6 +70,7 @@ class Profile extends Component {
     
       componentDidMount(){
         this.getData();
+        
       }
     
 
@@ -86,7 +87,7 @@ class Profile extends Component {
                                     <img id="profileImg" src={this.state.data} alt={"image not found"} />
                                 ) : (
                                     <div className="text-avatar">
-                                        <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
+                                        {/* <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span> */}
                                     </div>
                                 )
                             }

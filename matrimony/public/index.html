@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    
+    
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,6 +11,7 @@
       name="description"
       content="Web site created using create-react-app"
     />
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -26,9 +29,11 @@
     -->
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <link href="css/bootstrap-3.1.1.min.css" rel='stylesheet' type='text/css' />
+<link href="css/flexslider.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery.flexisel.js"></script>
 <!-- Custom Theme files -->
 <link href="css/style.css" rel='stylesheet' type='text/css' />
 <link href='//fonts.googleapis.com/css?family=Oswald:300,400,700' rel='stylesheet' type='text/css'>
@@ -36,6 +41,7 @@
 <!----font-Awesome----->
 <link href="css/font-awesome.css" rel="stylesheet"> 
 <!----font-Awesome----->
+
 <script>
 $(document).ready(function(){
     $(".dropdown").hover(            
@@ -48,8 +54,34 @@ $(document).ready(function(){
             $(this).toggleClass('open');       
         }
     );
+
+    // $("#flexiselDemo3").flexisel({
+    //               visibleItems: 6,
+    //               animationSpeed: 1000,
+    //               autoPlay:false,
+    //               autoPlaySpeed: 3000,    		
+    //               pauseOnHover: true,
+    //               enableResponsiveBreakpoints: true,
+    //               responsiveBreakpoints: { 
+    //                   portrait: { 
+    //                       changePoint:480,
+    //                       visibleItems: 1
+    //                   }, 
+    //                   landscape: { 
+    //                       changePoint:640,
+    //                       visibleItems: 2
+    //                   },
+    //                   tablet: { 
+    //                       changePoint:768,
+    //                       visibleItems: 3
+    //                   }
+    //               }
+    //           })
+
 });
+
 </script>
+
 
     <title>React Matrimony App</title>
   </head>

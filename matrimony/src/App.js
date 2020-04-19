@@ -80,9 +80,13 @@ class App extends Component {
           <AppHeader authenticated={this.state.authenticated} onLogout={this.handleLogout} />
         </div>
       <div className="app-body">
-		  <Home/>
 		  <Router>
 		  <Switch>
+		  <Route exact path="/" authenticated={this.state.authenticated} currentUser={this.state.currentUser} component={Home}></Route>
+            <PrivateRoute exact path="/home"  authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+             component={Home}></PrivateRoute>
+			<PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={Profile}></PrivateRoute>
 	  <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} 
               onlogin={this.loadCurrentlyLoggedInUser} 
@@ -91,10 +95,7 @@ class App extends Component {
               render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}></Route>
             <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>  
 			
-			<PrivateRoute exact path="/home"  authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
-             component={Home}></PrivateRoute>
-			 <PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
-              component={Profile}></PrivateRoute>
+			
             </Switch>
 			</Router>
 	  </div>

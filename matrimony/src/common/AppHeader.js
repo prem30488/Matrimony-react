@@ -388,9 +388,18 @@ class AppHeader extends Component {
 				<li className="green">
 					<a href="#" className="icon-home"></a>
           <ul>
-					<li><a href="login">Login</a></li>
+          {
+            this.props.authenticated?
+            <React.Fragment>
+            <li><a onClick={this.props.onLogout}>Logout</a></li>
+            </React.Fragment>
+            :
+            <React.Fragment>
+          <li><a href="login">Login</a></li>
 					<li><a href="signup">Register</a></li>
-					<li><a onClick={this.props.onLogout}>Logout</a></li>
+          </React.Fragment>
+          }
+          
 				  </ul>
 					 
 				</li>
@@ -414,8 +423,12 @@ class AppHeader extends Component {
 		    <div className="collapse navbar-collapse" id="bs-megadropdown-tabs">
 		        <ul className="nav navbar-nav nav_1">
 		            <li><a href="/">Home</a></li>
+                
 		            <li><a href="about.html">About</a></li>
-		    		<li className="dropdown">
+                {this.props.authenticated?
+            <React.Fragment>
+            <li><a href="profile">Profile</a></li>
+            <li className="dropdown">
 		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Matches<span className="caret"></span></a>
 		              <ul className="dropdown-menu" role="menu">
 		                <li><a href="matches.html">New Matches</a></li>
@@ -445,6 +458,10 @@ class AppHeader extends Component {
 		                <li><a href="upgrade.html">Upgrade</a></li>
 		              </ul>
 		            </li>
+                </React.Fragment>
+                :
+                <li><a href="/events">News &amp; Events</a></li>
+                }
 		            <li className="last"><a href="contact.html">Contacts</a></li>
 		        </ul>
 		     </div>
