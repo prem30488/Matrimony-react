@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+//import './App.css';
 import AppHeader from './common/AppHeader';
 import AppFooter from './common/AppFooter';
 import Home from './home/Home';
 import Login from './user/login/Login';
 import Signup from './user/signup/Signup';
 import Profile from './user/profile/Profile';
+import GeneralProfile from './user/profile/GeneralProfile';
+import FamilyProfile from './user/profile/FamilyProfile';
+import AstroProfile from './user/profile/AstroProfile';
+import CareerProfile from './user/profile/CareerProfile';
 import Contact from './user/contact/Contact';
 import OAuth2RedirectHandler from './user/oauth2/OAuth2RedirectHandler';
 import NotFound from './common/NotFound';
@@ -77,7 +81,7 @@ class App extends Component {
 	  return(
     <div className="App">
 		<div className="app-top-box">
-          <AppHeader authenticated={this.state.authenticated} onLogout={this.handleLogout} />
+          <AppHeader authenticated={this.state.authenticated} currentUser={this.state.currentUser} onLogout={this.handleLogout} />
         </div>
       <div className="app-body">
 		  <Router>
@@ -87,6 +91,14 @@ class App extends Component {
              component={Home}></PrivateRoute>
 			<PrivateRoute path="/profile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
               component={Profile}></PrivateRoute>
+			<Route exact path="/generalProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={GeneralProfile}></Route>
+			<Route exact path="/familyProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={FamilyProfile}></Route>
+			<Route exact path="/astroProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={AstroProfile}></Route>
+			<Route exact path="/careerProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={CareerProfile}></Route>
 	  <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} 
               onlogin={this.loadCurrentlyLoggedInUser} 
@@ -95,7 +107,7 @@ class App extends Component {
               render={(props) => <Signup authenticated={this.state.authenticated} {...props} />}></Route>
             <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>  
 			
-			
+			<Route component={NotFound}></Route>
             </Switch>
 			</Router>
 	  </div>

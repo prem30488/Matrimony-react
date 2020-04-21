@@ -97,9 +97,69 @@ export function updateUser(userRequest) {
     });
 }
 
+export function updateGeneralProfile(profileRequest) {
+    return request({
+        url: API_BASE_URL + "/api/user/profile/"+profileRequest.id,
+        method: 'PUT',
+        body: JSON.stringify(profileRequest)
+    });
+}
+
+export function updateFamilyProfile(profileRequest) {
+    return request({
+        url: API_BASE_URL + "/api/user/familyProfile/"+profileRequest.id,
+        method: 'PUT',
+        body: JSON.stringify(profileRequest)
+    });
+}
+
+export function updateAstroProfile(profileRequest) {
+    return request({
+        url: API_BASE_URL + "/api/user/astroProfile/"+profileRequest.id,
+        method: 'PUT',
+        body: JSON.stringify(profileRequest)
+    });
+}
+
+export function updateCareerProfile(profileRequest) {
+    return request({
+        url: API_BASE_URL + "/api/user/careerProfile/"+profileRequest.id,
+        method: 'PUT',
+        body: JSON.stringify(profileRequest)
+    });
+}
+
 export function fetchUserById(id) {
     return request({
         url: API_BASE_URL + "/api/user/users/" + id,
+        method: 'GET'
+    });
+}
+
+export function fetchGeneralProfileById(id) {
+    return request({
+        url: API_BASE_URL + "/api/user/profile/" + id,
+        method: 'GET'
+    });
+}
+
+export function fetchFamilyProfileById(id) {
+    return request({
+        url: API_BASE_URL + "/api/user/familyProfile/" + id,
+        method: 'GET'
+    });
+}
+
+export function fetchAstroProfileById(id) {
+    return request({
+        url: API_BASE_URL + "/api/user/astroProfile/" + id,
+        method: 'GET'
+    });
+}
+
+export function fetchCareerProfileById(id) {
+    return request({
+        url: API_BASE_URL + "/api/user/careerProfile/" + id,
         method: 'GET'
     });
 }
