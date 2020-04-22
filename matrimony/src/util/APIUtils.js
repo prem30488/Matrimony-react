@@ -129,6 +129,14 @@ export function updateCareerProfile(profileRequest) {
     });
 }
 
+export function updatePartnerPreferenceProfile(profileRequest) {
+    return request({
+        url: API_BASE_URL + "/api/user/partnerPreference/"+profileRequest.id,
+        method: 'PUT',
+        body: JSON.stringify(profileRequest)
+    });
+}
+
 export function fetchUserById(id) {
     return request({
         url: API_BASE_URL + "/api/user/users/" + id,
@@ -160,6 +168,13 @@ export function fetchAstroProfileById(id) {
 export function fetchCareerProfileById(id) {
     return request({
         url: API_BASE_URL + "/api/user/careerProfile/" + id,
+        method: 'GET'
+    });
+}
+
+export function fetchPartnerPreferenceProfileById(id) {
+    return request({
+        url: API_BASE_URL + "/api/user/partnerPreference/" + id,
         method: 'GET'
     });
 }
