@@ -70,7 +70,7 @@ class AppHeader extends Component {
             <li className="dropdown">
 		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Matches<span className="caret"></span></a>
 		              <ul className="dropdown-menu" role="menu">
-		                <li><a href="matches.html">New Matches</a></li>
+		                <li><a href="/newMatches">New Matches</a></li>
 		                <li><a href="viewed-profile.html">Who Viewed my Profile</a></li>
 		                <li><a href="viewed-not_contacted.html">Viewed & not Contacted</a></li>
 		                <li><a href="members.html">Premium Members</a></li>

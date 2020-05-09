@@ -12,6 +12,7 @@ import FamilyProfile from './user/profile/FamilyProfile';
 import AstroProfile from './user/profile/AstroProfile';
 import CareerProfile from './user/profile/CareerProfile';
 import PartnerPreferenceProfile from './user/profile/PartnerPreferenceProfile';
+import NewMatches from './matches/NewMatches';
 import Contact from './user/contact/Contact';
 import OAuth2RedirectHandler from './user/oauth2/OAuth2RedirectHandler';
 import NotFound from './common/NotFound';
@@ -102,6 +103,8 @@ class App extends Component {
               component={CareerProfile}></Route>
 			  <Route exact path="/partnerPreferenceProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
               component={PartnerPreferenceProfile}></Route>
+			  <Route exact path="/newMatches" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={NewMatches}></Route>
 	  <Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} 
               onlogin={this.loadCurrentlyLoggedInUser} 

@@ -357,3 +357,10 @@ export function fetchTestimonialById(id) {
         method: 'GET'
     });
 }
+
+export function fetchSolrEntitiesDesc(page,size) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/getAll?page="+page+"&size="+size+"&sort=id,desc",
+        method: 'GET'
+    });
+}

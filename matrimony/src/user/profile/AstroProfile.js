@@ -187,8 +187,8 @@ class AstroProfileForm extends Component {
             </select>
           </div>
           <div className="form-item form-type-textfield form-item-name">
-			     <label htmlFor="edit-mangalik">Manglik <span className="form-required" title="This field is required.">*</span></label>
-                 <select id="edit-mangalik" name="mangalik" value={this.state.manglik} onChange={this.handleInputChange} className="form-text required">  
+			     <label htmlFor="edit-manglik">Manglik <span className="form-required" title="This field is required.">*</span></label>
+                 <select id="edit-manglik" name="manglik" value={this.state.manglik} onChange={this.handleInputChange} className="form-text required">  
                  <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
