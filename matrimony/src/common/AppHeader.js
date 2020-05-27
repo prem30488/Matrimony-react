@@ -81,6 +81,7 @@ class AppHeader extends Component {
 		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Search<span className="caret"></span></a>
 		              <ul className="dropdown-menu" role="menu">
 		                <li><a href="search.html">Regular Search</a></li>
+						<li><a href="/advancedSearch">Advanced Search</a></li>
 		                <li><a href="profile.html">Recently Viewed Profiles</a></li>
 		                <li><a href="search-id.html">Search By Profile ID</a></li>
 		                <li><a href="faq.html">Faq</a></li>

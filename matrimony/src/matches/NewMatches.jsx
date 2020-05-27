@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 //import solrReducer from "./solr-reducer";
-import {fetchSolrEntitiesDesc,getCurrentUser} from '../util/APIUtils';
-import Alert from 'react-s-alert';
+import {fetchSolrEntitiesDesc,getCurrentUser,isShortlisted, shortlist} from '../util/APIUtils';
 import TablePagination from '@material-ui/core/TablePagination';
+import AppFooter from "../common/AppFooter";
+import Alert from 'react-s-alert';
 class NewMatches extends Component {
 
     constructor(props) {
@@ -18,9 +19,21 @@ class NewMatches extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.reloadUserList = this.reloadUserList.bind(this);
         this.handleChangePage = this.handleChangePage.bind(this);
-        this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+		this.shortlistUser = this.shortlistUser.bind(this);
+		this.unshortlistUser = this.unshortlistUser.bind(this);
 	}
 	
+
+	shortlistUser(id){ 
+		shortlist(id);
+		Alert.success("Profile shortlisted Successfully!");
+	 } 
+	 
+	 unshortlistUser(id) { 
+		shortlist(id);
+		Alert.success("Profile unshortlisted Successfully!");
+	 } 
 
 	setPage(page){
         console.log('setpage called',page);
@@ -63,7 +76,7 @@ class NewMatches extends Component {
         fetchSolrEntitiesDesc(this.state.page,this.state.rowsPerPage)
             .then((res) => {
                 //console.log(JSON.stringify(res.content));
-                let user = res;
+                
                 this.setState({
 					users:res.content,
 					count: res.totalElements
@@ -71,10 +84,7 @@ class NewMatches extends Component {
             });
             
     }
-	componentDidUpdate() {
-        this.reloadUserList();
-        //console.log(JSON.stringify(this.state.users));
-      }
+	
 	handleChangePage = (event, newPage) => {
         this.setPage(newPage);
       };
@@ -84,10 +94,10 @@ class NewMatches extends Component {
         this.setPage(0);
       };
 
-      //componentDidUpdate() {
-        //this.reloadUserList();
+      componentDidUpdate() {
+        this.reloadUserList();
         //console.log(JSON.stringify(this.state.users));
-      //}
+      }
 
     handleInputChange(event) {
         const target = event.target;
@@ -99,7 +109,10 @@ class NewMatches extends Component {
         });        
     }
 
-    
+	editUser(id) {
+        window.localStorage.setItem("profileId", id);
+        this.props.history.push('/viewProfile');
+    }    
 
     handleSubmit(event) {
         event.preventDefault();   
@@ -118,9 +131,10 @@ class NewMatches extends Component {
     }
 
   render() {
+	
     return (
         <React.Fragment>
-            <form>
+            
             <div className="grid_3">
   <div className="container">
    <div className="breadcrumb1">
@@ -142,7 +156,7 @@ class NewMatches extends Component {
 		<div className="clearfix"> </div>
 	  </div>
 	  {this.state.users.map(row => (
-                            <div className="profile_top" key={row.id}><a href="view_profile">
+                            <div className="profile_top" key={row.id}><a href="#">
       <h2>{row.id} | Profile Created by {row.profileCreatedBy}</h2>
 	    <div className="col-sm-3 profile_left-top">
 	    	<img src={`images/${row.id}.jpg`} className="img-responsive" alt=""/>
@@ -156,6 +170,10 @@ class NewMatches extends Component {
 	    <div className="col-sm-6">
 	    	<table className="table_working_hours">
 	        	<tbody>
+					<tr className="opened_1">
+						<td className="day_label1">Name :</td>
+						<td className="day_value"><a onClick={() => this.editUser(row.id)}>{row.name}</a></td>
+					</tr>
 	        		<tr className="opened_1">
 						<td className="day_label1">Age / Height :</td>
 						<td className="day_value">{row.age}</td>
@@ -174,7 +192,7 @@ class NewMatches extends Component {
 					</tr>
 				    <tr className="opened">
 						<td className="day_label1">Location :</td>
-						<td className="day_value">{row.location}</td>
+						<td className="day_value">{row.locationOfHome}</td>
 					</tr>
 				    <tr className="closed">
 						<td className="day_label1">Profile Created by :</td>
@@ -188,7 +206,9 @@ class NewMatches extends Component {
 		   </table>
 		   <div className="buttons">
 			   <div className="vertical">Send Mail</div>
-			   <div className="vertical">Shortlisted</div>
+			   <div className="vertical">
+			   {row.isShortlisted?"Shortlisted":"Shortlist"}
+			    </div>
 			   <div className="vertical">Send Interest</div>
 		   </div>
 	    </div>
@@ -211,13 +231,6 @@ class NewMatches extends Component {
           onChangePage={this.handleChangePage}
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
-{/* 	 
-    <ul className="pagination">
- 	  <li className="active"><a href="#">1</a></li>
- 	  <li><a href="#">2</a></li>
- 	  <li><a href="#">3</a></li>
- 	  <li><a href="#">4</a></li>
-	</ul> */}
   </div>
   <div className="col-md-3 match_right">
     <ul className="menu">
@@ -286,10 +299,15 @@ class NewMatches extends Component {
    <div className="clearfix"> </div>
   </div>
 </div>
-</form>
+
+<AppFooter/>
+<Alert stack={{limit: 3}} 
+          timeout = {5000}
+          position='top-right' effect='slide' offset={65} />
         </React.Fragment>
     );
 }
 }
+
 
 export default NewMatches;

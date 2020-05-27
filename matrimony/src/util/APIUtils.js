@@ -15,7 +15,7 @@ const request = (options) => {
     .then(response => 
         response.json().then(json => {
             console.log('json :',json);
-            console.log('response.ok',response.ok);
+            //console.log('response.ok',response.ok);
             if(!response.ok) {
                 return Promise.reject(json);
             }
@@ -362,5 +362,21 @@ export function fetchSolrEntitiesDesc(page,size) {
     return request({
         url: API_BASE_URL + "/api/solrSearchEntity/getAll?page="+page+"&size="+size+"&sort=id,desc",
         method: 'GET'
+    });
+}
+
+export function isShortlisted(id){
+    return request({
+        url: API_BASE_URL + "/api/user/profile/isShortlisted",
+        body: JSON.stringify({"id":id}),
+        method: 'POST'
+    });
+}
+
+export function shortlist(id){
+    return request({
+        url: API_BASE_URL + "/api/user/profile/shortlist",
+        body: JSON.stringify({"id":id}),
+        method: 'POST'
     });
 }

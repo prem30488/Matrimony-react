@@ -13,6 +13,8 @@ import AstroProfile from './user/profile/AstroProfile';
 import CareerProfile from './user/profile/CareerProfile';
 import PartnerPreferenceProfile from './user/profile/PartnerPreferenceProfile';
 import NewMatches from './matches/NewMatches';
+import ViewProfile from './user/profile/ViewProfile';
+import AdvancedSearch from './search/AdvancedSearch';
 import Contact from './user/contact/Contact';
 import OAuth2RedirectHandler from './user/oauth2/OAuth2RedirectHandler';
 import NotFound from './common/NotFound';
@@ -81,11 +83,11 @@ class App extends Component {
 	  }
 	  
 	  return(
-    <div className="App">
+    <div className="App content-container">
 		<div className="app-top-box">
           <AppHeader authenticated={this.state.authenticated} currentUser={this.state.currentUser} onLogout={this.handleLogout} />
         </div>
-      <div className="app-body">
+      <div className="header">
 		  <Router>
 		  <Switch>
 		  <Route exact path="/" authenticated={this.state.authenticated} currentUser={this.state.currentUser} component={Home}></Route>
@@ -105,7 +107,11 @@ class App extends Component {
               component={PartnerPreferenceProfile}></Route>
 			  <Route exact path="/newMatches" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
               component={NewMatches}></Route>
-	  <Route path="/login"
+			  <Route exact path="/viewProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={ViewProfile}></Route>
+			  <Route exact path="/advancedSearch" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={AdvancedSearch}></Route>
+	  		<Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} 
               onlogin={this.loadCurrentlyLoggedInUser} 
               {...props} />}></Route>
@@ -117,7 +123,7 @@ class App extends Component {
             </Switch>
 			</Router>
 	  </div>
-	  <AppFooter/>
+
 	  <Alert stack={{limit: 3}} 
           timeout = {3000}
           position='top-right' effect='slide' offset={65} />

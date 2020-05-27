@@ -1,0 +1,12 @@
+{
+	"parser": "babel-eslint",
+	"presets": [
+		"env",
+		"react"
+	],
+	"plugins": [
+		"transform-es2015-destructuring",
+		"transform-object-rest-spread",
+		"transform-object-assign"
+	]
+}

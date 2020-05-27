@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ACCESS_TOKEN } from '../constants';
 import { Carousel, Controls, Slider } from 'flex-carousel';
- 
+import AppFooter from "../common/AppFooter";
 const colors = ['red', 'green', 'blue','white','black','pink'];
 class Home extends Component {
     constructor(props) {
@@ -67,6 +67,7 @@ class Home extends Component {
         </div>
       </Carousel>
       </div>
+      
   </div>    
   
                   
@@ -82,6 +83,7 @@ class Home extends Component {
   </div>                            
                                     </React.Fragment>
                                 )}
+                                <AppFooter/>
   </React.Fragment>
         )
     }
