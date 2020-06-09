@@ -1,6 +1,10 @@
+
 import React, {Component} from 'react';
 //import solrReducer from "./solr-reducer";
-import {fetchSolrEntitiesDesc,getCurrentUser,isShortlisted, shortlist} from '../util/APIUtils';
+import {fetchSolrEntitiesDesc,getCurrentUser,fetchWeeklyCount,
+	getDistinctMaritalStatus,
+	getWeeklyEntities,getMonthlyEntities,findByImageUrlIsNotNullOrderByIdDesc,
+	fetchMonthlyCount,countwithImage, shortlist} from '../util/APIUtils';
 import TablePagination from '@material-ui/core/TablePagination';
 import AppFooter from "../common/AppFooter";
 import Alert from 'react-s-alert';
@@ -13,7 +17,11 @@ class NewMatches extends Component {
             users:[],
             page:0,
 			rowsPerPage:5,
-			count:0
+			count:0,
+			weekly:0,
+			monthly:0,
+			photoCount:0,
+			maritalStatusList : []
         }
         this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,8 +30,66 @@ class NewMatches extends Component {
 		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
 		this.shortlistUser = this.shortlistUser.bind(this);
 		this.unshortlistUser = this.unshortlistUser.bind(this);
+		this.setWeeklyUsers = this.setWeeklyUsers.bind(this);
+		this.setMonthlyUsers = this.setMonthlyUsers.bind(this);
+		this.findByImageUrlIsNotNullOrderByIdDesc = this.findByImageUrlIsNotNullOrderByIdDesc.bind(this);
+		this.fetchDistinctMaritalStatus = this.fetchDistinctMaritalStatus.bind(this);
+		this.reloadUserList();
+		this.fetchDistinctMaritalStatus();
+	}
+
+	fetchDistinctMaritalStatus(){
+		getDistinctMaritalStatus()
+		.then((resDistinctMaritalStatus) => {
+			
+			this.setState({
+				maritalStatusList:resDistinctMaritalStatus
+			});
+		});
 	}
 	
+	setWeeklyUsers(e){
+		e.preventDefault();
+		getWeeklyEntities(this.state.page,this.state.rowsPerPage,'id')
+			.then((resWeeklyUsers) => {
+				//console.log("weekly :" ,JSON.stringify(res));
+				this.setState({
+					users:resWeeklyUsers,
+					count: resWeeklyUsers.length,
+					page:0,
+					rowsPerPage:5
+				});
+			});
+	}
+
+	setMonthlyUsers(e){
+		e.preventDefault();
+		getMonthlyEntities(this.state.page,this.state.rowsPerPage,'id')
+			.then((resMonthlyUsers) => {
+				//console.log("weekly :" ,JSON.stringify(res));
+				this.setState({
+					users:resMonthlyUsers,
+					count: resMonthlyUsers.length,
+					page:0,
+					rowsPerPage:5
+				});
+			});
+	}
+
+	findByImageUrlIsNotNullOrderByIdDesc(e){
+		e.preventDefault();
+		findByImageUrlIsNotNullOrderByIdDesc(this.state.page,this.state.rowsPerPage,'id')
+			.then((resUsersWithPhoto) => {
+				//console.log("weekly :" ,JSON.stringify(res));
+				this.setState({
+					users:resUsersWithPhoto,
+					count: resUsersWithPhoto.length,
+					page:0,
+					rowsPerPage:5
+				});
+			});
+		
+	}
 
 	shortlistUser(id){ 
 		shortlist(id);
@@ -36,7 +102,7 @@ class NewMatches extends Component {
 	 } 
 
 	setPage(page){
-        console.log('setpage called',page);
+        //console.log('setpage called',page);
         this.setState({
             page: page
       });
@@ -44,7 +110,7 @@ class NewMatches extends Component {
     }
 
     setRowsPerPage(rowsPerPage){
-        console.log('setRowsPerPage called',rowsPerPage);
+        //console.log('setRowsPerPage called',rowsPerPage);
         this.setState({
             rowsPerPage: rowsPerPage
       });
@@ -69,7 +135,7 @@ class NewMatches extends Component {
 	
     componentDidMount() {
 		this.loadCurrentlyLoggedInUser();
-		this.reloadUserList();
+		//this.reloadUserList();
     }
        
     reloadUserList() {
@@ -80,9 +146,28 @@ class NewMatches extends Component {
                 this.setState({
 					users:res.content,
 					count: res.totalElements
-                })
+                });
             });
-            
+			fetchWeeklyCount()    
+			.then((resWeeklyUsers) => {
+				this.setState({
+					weekly:resWeeklyUsers
+				});
+			});
+
+			fetchMonthlyCount()    
+			.then((resMonthlyUsersCount) => {
+				this.setState({
+					monthly:resMonthlyUsersCount
+				});
+			});
+
+			countwithImage()
+			.then((res)=> {
+				this.setState({
+					photoCount:res
+				});
+			});
     }
 	
 	handleChangePage = (event, newPage) => {
@@ -95,7 +180,7 @@ class NewMatches extends Component {
       };
 
       componentDidUpdate() {
-        this.reloadUserList();
+        //this.reloadUserList();
         //console.log(JSON.stringify(this.state.users));
       }
 
@@ -129,6 +214,7 @@ class NewMatches extends Component {
         // });
         Alert.success("Profile Updated Successfully!");
     }
+
 
   render() {
 	
@@ -236,18 +322,26 @@ class NewMatches extends Component {
     <ul className="menu">
 		<li className="item1"><h3 className="m_2">Show Profiles Created</h3>
 		  <ul className="cute">
-			<li className="subitem1"><a href="#">within a week (2) </a></li>
-			<li className="subitem2"><a href="#">within a month (4)</a></li>
+			<li className="subitem1"><a href="javascript:void(0)" onClick={this.setWeeklyUsers}>within a week ({this.state.weekly}) </a></li>
+			<li className="subitem2"><a href="javascript:void(0)" onClick={this.setMonthlyUsers}>within a month ({this.state.monthly})</a></li>
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Profile type</h3>
 		  <ul className="cute">
-			<li className="subitem1"><a href="#">with Photo (3) </a></li>
+			<li className="subitem1"><a href="javascript:void(0)" onClick={this.findByImageUrlIsNotNullOrderByIdDesc}>with Photo ({this.state.photoCount}) </a></li>
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Marital Status</h3>
 		  <ul className="cute">
-			<li className="subitem1"><a href="#">Unmarried (2) </a></li>
+		  {Object.keys(this.state.maritalStatusList).map(keyOuter => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuter}`}><a href="javascript:void(0)">
+				{this.state.maritalStatusList[keyOuter][0]}
+				({this.state.maritalStatusList[keyOuter][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Mother Tongue</h3>

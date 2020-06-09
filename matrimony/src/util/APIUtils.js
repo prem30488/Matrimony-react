@@ -343,6 +343,8 @@ export function addTestimonial(testimonialRequest) {
     });
 }
 
+
+
 export function updateTestimonial(testimonialRequest) {
     return request({
         url: API_BASE_URL + "/api/user/testimonials/"+testimonialRequest.id,
@@ -365,6 +367,27 @@ export function fetchSolrEntitiesDesc(page,size) {
     });
 }
 
+export function fetchWeeklyCount() {
+    return request({
+        url: API_BASE_URL + "/api/user/users/weekly",
+        method: 'GET'
+    });
+}
+
+export function fetchMonthlyCount() {
+    return request({
+        url: API_BASE_URL + "/api/user/users/monthly",
+        method: 'GET'
+    });
+}
+
+export function countwithImage() {
+    return request({
+        url: API_BASE_URL + "/api/user/users/countwithImage",
+        method: 'GET'
+    });
+}
+
 export function isShortlisted(id){
     return request({
         url: API_BASE_URL + "/api/user/profile/isShortlisted",
@@ -378,5 +401,33 @@ export function shortlist(id){
         url: API_BASE_URL + "/api/user/profile/shortlist",
         body: JSON.stringify({"id":id}),
         method: 'POST'
+    });
+}
+
+export function getWeeklyEntities(page,size,sort) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/getWeeklyEntities?page="+page+"&size="+size+"&sort="+sort+"",
+        method: 'GET'
+    });
+}
+
+export function getMonthlyEntities(page,size,sort) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/getMonthlyEntities?page="+page+"&size="+size+"&sort="+sort+"",
+        method: 'GET'
+    });
+}
+
+export function findByImageUrlIsNotNullOrderByIdDesc(page,size,sort) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/findByImageUrlIsNotNullOrderByIdDesc?page="+page+"&size="+size+"&sort="+sort+"",
+        method: 'GET'
+    });
+}
+
+export function getDistinctMaritalStatus() {
+    return request({
+        url: API_BASE_URL + "/api/user/profile/getDistinctMaritalStatus",
+        method: 'GET'
     });
 }

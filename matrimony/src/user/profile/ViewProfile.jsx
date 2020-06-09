@@ -244,7 +244,7 @@ class ViewProfile extends Component {
 								</tr>
 							    <tr className="opened">
 									<td className="day_label">Place of Birth :</td>
-									<td className="day_value closed"><span>Not Specified</span></td>
+									<td className="day_value closed"><span>{this.state.astroProfile.placeOfBirth}</span></td>
 								</tr>
 							 </tbody>
 				          </table>
