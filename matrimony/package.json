@@ -8,9 +8,11 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+    "classnames": "^2.2.5",
     "flex-carousel": "^1.1.4",
     "jquery": "^3.5.0",
     "materialui-pagination": "0.0.6",
+    "prop-types": "^15.6.1",
     "react": "^16.13.1",
     "react-calendar": "^3.0.1",
     "react-country-region-selector": "^2.1.0",
@@ -23,8 +25,7 @@
     "react-s-alert": "^1.4.1",
     "react-scripts": "3.4.1",
     "react-time-picker": "^4.0.1",
-    "classnames": "^2.2.5",
-    "prop-types": "^15.6.1",
+    "styled-components": "^5.1.1",
     "xhr": "^2.2.0"
   },
   "scripts": {

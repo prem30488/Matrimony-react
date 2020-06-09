@@ -14,7 +14,7 @@ const request = (options) => {
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
-            console.log('json :',json);
+            //console.log('json :',json);
             //console.log('response.ok',response.ok);
             if(!response.ok) {
                 return Promise.reject(json);
@@ -367,6 +367,14 @@ export function fetchSolrEntitiesDesc(page,size) {
     });
 }
 
+export function fetchByMaritalStatus(maritalStatus,page,size,orderBy) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/findByMaritalStatusIn?page="+page+"&size="+size+"&sort="+orderBy+",desc",
+        method: 'POST',
+        body: "{\"data\" : [{\"maritalStatus\" : \""+maritalStatus+"\"}]}"
+    });
+}
+
 export function fetchWeeklyCount() {
     return request({
         url: API_BASE_URL + "/api/user/users/weekly",
@@ -418,7 +426,7 @@ export function getMonthlyEntities(page,size,sort) {
     });
 }
 
-export function findByImageUrlIsNotNullOrderByIdDesc(page,size,sort) {
+export function findByImageUrlIsNotNullOrderById(page,size,sort) {
     return request({
         url: API_BASE_URL + "/api/solrSearchEntity/findByImageUrlIsNotNullOrderByIdDesc?page="+page+"&size="+size+"&sort="+sort+"",
         method: 'GET'

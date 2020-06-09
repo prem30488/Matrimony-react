@@ -1,9 +1,8 @@
-
 import React, {Component} from 'react';
 //import solrReducer from "./solr-reducer";
-import {fetchSolrEntitiesDesc,getCurrentUser,fetchWeeklyCount,
+import {fetchSolrEntitiesDesc,fetchByMaritalStatus,getCurrentUser,fetchWeeklyCount,
 	getDistinctMaritalStatus,
-	getWeeklyEntities,getMonthlyEntities,findByImageUrlIsNotNullOrderByIdDesc,
+	getWeeklyEntities,getMonthlyEntities,findByImageUrlIsNotNullOrderById,
 	fetchMonthlyCount,countwithImage, shortlist} from '../util/APIUtils';
 import TablePagination from '@material-ui/core/TablePagination';
 import AppFooter from "../common/AppFooter";
@@ -32,8 +31,9 @@ class NewMatches extends Component {
 		this.unshortlistUser = this.unshortlistUser.bind(this);
 		this.setWeeklyUsers = this.setWeeklyUsers.bind(this);
 		this.setMonthlyUsers = this.setMonthlyUsers.bind(this);
-		this.findByImageUrlIsNotNullOrderByIdDesc = this.findByImageUrlIsNotNullOrderByIdDesc.bind(this);
+		this.findByImageUrlI1sNotNullOrderByIdDesc = this.findByImageUrlIsNotNullOrderByIdDesc.bind(this);
 		this.fetchDistinctMaritalStatus = this.fetchDistinctMaritalStatus.bind(this);
+		this.findByMaritalStatus = this.findByMaritalStatus.bind(this);
 		this.reloadUserList();
 		this.fetchDistinctMaritalStatus();
 	}
@@ -41,9 +41,8 @@ class NewMatches extends Component {
 	fetchDistinctMaritalStatus(){
 		getDistinctMaritalStatus()
 		.then((resDistinctMaritalStatus) => {
-			
 			this.setState({
-				maritalStatusList:resDistinctMaritalStatus
+				maritalStatusList:resDistinctMaritalStatus.data
 			});
 		});
 	}
@@ -78,19 +77,27 @@ class NewMatches extends Component {
 
 	findByImageUrlIsNotNullOrderByIdDesc(e){
 		e.preventDefault();
-		findByImageUrlIsNotNullOrderByIdDesc(this.state.page,this.state.rowsPerPage,'id')
+		findByImageUrlIsNotNullOrderById(this.state.page,this.state.rowsPerPage,'id')
 			.then((resUsersWithPhoto) => {
-				//console.log("weekly :" ,JSON.stringify(res));
 				this.setState({
 					users:resUsersWithPhoto,
-					count: resUsersWithPhoto.length,
-					page:0,
-					rowsPerPage:5
+					count: resUsersWithPhoto.length
 				});
 			});
 		
 	}
 
+	findByMaritalStatus(selectedMaritalStatus){
+		//e.preventDefault();
+		fetchByMaritalStatus(selectedMaritalStatus,this.state.page,this.state.rowsPerPage,'id')
+		.then((resMaritalStatus) => {
+			//console.log(JSON.stringify(resMaritalStatus));
+			this.setState({
+				users:resMaritalStatus.content,
+				count: resMaritalStatus.totalElements
+			});
+		});
+	}
 	shortlistUser(id){ 
 		shortlist(id);
 		Alert.success("Profile shortlisted Successfully!");
@@ -336,8 +343,10 @@ class NewMatches extends Component {
 		  {Object.keys(this.state.maritalStatusList).map(keyOuter => {
         //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
           return (
-            <li className="subitem1" key={`${keyOuter}`}><a href="javascript:void(0)">
-				{this.state.maritalStatusList[keyOuter][0]}
+            <li className="subitem1" key={`${keyOuter}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByMaritalStatus(this.state.maritalStatusList[keyOuter][0])}
+			>
+				{this.state.maritalStatusList[keyOuter][0]} 
 				({this.state.maritalStatusList[keyOuter][1]})</a></li>
           );
         
