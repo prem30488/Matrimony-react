@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
 //import solrReducer from "./solr-reducer";
-import {fetchSolrEntitiesDesc,fetchByMaritalStatus,getCurrentUser,fetchWeeklyCount,
-	getDistinctMaritalStatus,
-	getWeeklyEntities,getMonthlyEntities,findByImageUrlIsNotNullOrderById,
-	fetchMonthlyCount,countwithImage, shortlist} from '../util/APIUtils';
+import {fetchSolrEntitiesDesc,fetchByMaritalStatus,fetchByMotherTounge,
+	fetchByEducation, fetchByOccupation,fetchByPhysicalStatus,fetchByDiet,
+	fetchBySmoke, fetchByDrink,
+	getCurrentUser,fetchWeeklyCount,
+	getDistinctMaritalStatus, getDistinctMotherTounge,
+	getWeeklyEntities,getMonthlyEntities,findByImageUrl,
+	fetchMonthlyCount,countwithImage, shortlist,unshortlist,
+	getDistinctEducation, getDistinctOccupation,getDistinctPhysicalStatus,
+	getDistinctDiet, getDistinctSmoke, getDistinctDrink
+} from '../util/APIUtils';
 import TablePagination from '@material-ui/core/TablePagination';
 import AppFooter from "../common/AppFooter";
 import Alert from 'react-s-alert';
@@ -20,7 +26,14 @@ class NewMatches extends Component {
 			weekly:0,
 			monthly:0,
 			photoCount:0,
-			maritalStatusList : []
+			maritalStatusList : [],
+			motherToungeList : [],
+			educationList : [],
+			occupationList : [],
+			physicalStatusList: [],
+			dietList : [],
+			smokeList : [],
+			drinkList : []
         }
         this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,11 +44,34 @@ class NewMatches extends Component {
 		this.unshortlistUser = this.unshortlistUser.bind(this);
 		this.setWeeklyUsers = this.setWeeklyUsers.bind(this);
 		this.setMonthlyUsers = this.setMonthlyUsers.bind(this);
-		this.findByImageUrlI1sNotNullOrderByIdDesc = this.findByImageUrlIsNotNullOrderByIdDesc.bind(this);
+		this.findByImage = this.findByImage.bind(this);
+		
 		this.fetchDistinctMaritalStatus = this.fetchDistinctMaritalStatus.bind(this);
 		this.findByMaritalStatus = this.findByMaritalStatus.bind(this);
+		this.fetchDistinctMotherTounge = this.fetchDistinctMotherTounge.bind(this);
+		this.findByMotherTounge = this.findByMotherTounge.bind(this);
+		this.fetchDistinctEducation = this.fetchDistinctEducation.bind(this);
+		this.findByEducation = this.findByEducation.bind(this);
+		this.fetchDistinctOccupation = this.fetchDistinctOccupation.bind(this);
+		this.findByOccupation = this.findByOccupation.bind(this);
+		this.fetchDistinctPhysicalStatus = this.fetchDistinctPhysicalStatus.bind(this);
+		this.findByPhysicalStatus = this.findByPhysicalStatus.bind(this);
+		this.fetchDistinctDiet = this.fetchDistinctDiet.bind(this);
+		this.findByDiet = this.findByDiet.bind(this);
+		this.fetchDistinctSmoke = this.fetchDistinctSmoke.bind(this);
+		this.findBySmoke = this.findBySmoke.bind(this);
+		this.fetchDistinctDrink = this.fetchDistinctDrink.bind(this);
+		this.findByDrink = this.findByDrink.bind(this);
+
 		this.reloadUserList();
 		this.fetchDistinctMaritalStatus();
+		this.fetchDistinctMotherTounge();
+		this.fetchDistinctEducation();
+		this.fetchDistinctOccupation();
+		this.fetchDistinctPhysicalStatus();
+		this.fetchDistinctDiet();
+		this.fetchDistinctSmoke();
+		this.fetchDistinctDrink();
 	}
 
 	fetchDistinctMaritalStatus(){
@@ -46,18 +82,90 @@ class NewMatches extends Component {
 			});
 		});
 	}
+
+	fetchDistinctMotherTounge(){
+		getDistinctMotherTounge()
+		.then((resDistinctMotherTounge) => {
+			this.setState({
+				motherToungeList:resDistinctMotherTounge.data
+			});
+		});
+	}
 	
+	fetchDistinctEducation(){
+		getDistinctEducation()
+		.then((resDistinctEducation) => {
+			this.setState({
+				educationList:resDistinctEducation.data
+			});
+		});
+	}
+
+	fetchDistinctOccupation(){
+		getDistinctOccupation()
+		.then((resDistinctOccupation) => {
+			this.setState({
+				occupationList:resDistinctOccupation.data
+			});
+		});
+	}
+
+	fetchDistinctPhysicalStatus(){
+		getDistinctPhysicalStatus()
+		.then((resDistinctPhysicalStatus) => {
+			this.setState({
+				physicalStatusList:resDistinctPhysicalStatus.data
+			});
+		});
+	}
+
+	fetchDistinctDiet(){
+		getDistinctDiet()
+		.then((resDistinctDiet) => {
+			this.setState({
+				dietList:resDistinctDiet.data
+			});
+		});
+	}
+
+	fetchDistinctSmoke(){
+		getDistinctSmoke()
+		.then((resDistinctSmoke) => {
+			this.setState({
+				smokeList:resDistinctSmoke.data
+			});
+		});
+	}
+
+	fetchDistinctDrink(){
+		getDistinctDrink()
+		.then((resDistinctDrink) => {
+			this.setState({
+				drinkList:resDistinctDrink.data
+			});
+		});
+	}
+
 	setWeeklyUsers(e){
 		e.preventDefault();
 		getWeeklyEntities(this.state.page,this.state.rowsPerPage,'id')
 			.then((resWeeklyUsers) => {
-				//console.log("weekly :" ,JSON.stringify(res));
+				//console.log("weekly :" ,JSON.stringify(resWeeklyUsers));
 				this.setState({
-					users:resWeeklyUsers,
+					users:resWeeklyUsers.data,
 					count: resWeeklyUsers.length,
 					page:0,
 					rowsPerPage:5
 				});
+				if(resWeeklyUsers.length){
+					this.setState({
+						weekly: resWeeklyUsers.length
+					});
+				}else{
+					this.setState({
+						weekly: 0
+					});
+				}
 			});
 	}
 
@@ -67,21 +175,34 @@ class NewMatches extends Component {
 			.then((resMonthlyUsers) => {
 				//console.log("weekly :" ,JSON.stringify(res));
 				this.setState({
-					users:resMonthlyUsers,
+					users:resMonthlyUsers.data,
 					count: resMonthlyUsers.length,
 					page:0,
 					rowsPerPage:5
 				});
+				
+				if(resMonthlyUsers.length){
+					this.setState({
+						monthly: resMonthlyUsers.length
+					});
+				}else{
+					this.setState({
+						monthly: 0
+					});
+				}
 			});
 	}
 
-	findByImageUrlIsNotNullOrderByIdDesc(e){
+	findByImage(e){
 		e.preventDefault();
-		findByImageUrlIsNotNullOrderById(this.state.page,this.state.rowsPerPage,'id')
+		findByImageUrl(this.state.page,this.state.rowsPerPage,'id')
 			.then((resUsersWithPhoto) => {
+				//console.log("image url :" ,JSON.stringify(resUsersWithPhoto));
 				this.setState({
-					users:resUsersWithPhoto,
-					count: resUsersWithPhoto.length
+					users:resUsersWithPhoto.data,
+					count: resUsersWithPhoto.length,
+					page:0,
+					rowsPerPage:5
 				});
 			});
 		
@@ -98,14 +219,106 @@ class NewMatches extends Component {
 			});
 		});
 	}
-	shortlistUser(id){ 
+
+	findByMotherTounge(selectedMotherTounge){
+		//e.preventDefault();
+		fetchByMotherTounge(selectedMotherTounge,this.state.page,this.state.rowsPerPage,'id')
+		.then((resMotherTounge) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users:resMotherTounge.content,
+				count: resMotherTounge.totalElements
+			});
+		});
+	}
+
+	findByEducation(selectedEducation){
+		//e.preventDefault();
+		fetchByEducation(selectedEducation,this.state.page,this.state.rowsPerPage,'id')
+		.then((resEducation) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users:resEducation.content,
+				count: resEducation.totalElements
+			});
+		});
+	}
+
+	findByOccupation(selectedOccupation){
+		//e.preventDefault();
+		fetchByOccupation(selectedOccupation,this.state.page,this.state.rowsPerPage,'id')
+		.then((resOccupation) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users:resOccupation.content,
+				count: resOccupation.totalElements
+			});
+		});
+	}
+
+	findByPhysicalStatus(selectedPhysicalStatus){
+		//e.preventDefault();
+		fetchByPhysicalStatus(selectedPhysicalStatus,this.state.page,this.state.rowsPerPage,'id')
+		.then((resPhysicalStatus) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users: resPhysicalStatus.content,
+				count: resPhysicalStatus.totalElements
+			});
+		});
+	}
+
+	findByDiet(selectedDiet){
+		//e.preventDefault();
+		fetchByDiet(selectedDiet,this.state.page,this.state.rowsPerPage,'id')
+		.then((resDiet) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users: resDiet.content,
+				count: resDiet.totalElements
+			});
+		});
+	}
+
+	findBySmoke(selectedSmoke){
+		//e.preventDefault();
+		fetchBySmoke(selectedSmoke,this.state.page,this.state.rowsPerPage,'id')
+		.then((resSmoke) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users: resSmoke.content,
+				count: resSmoke.totalElements
+			});
+		});
+	}
+
+	findByDrink(selectedDrink){
+		//e.preventDefault();
+		fetchByDrink(selectedDrink,this.state.page,this.state.rowsPerPage,'id')
+		.then((resDrink) => {
+			//console.log(JSON.stringify(resMotherTounge));
+			this.setState({
+				users: resDrink.content,
+				count: resDrink.totalElements
+			});
+		});
+	}
+
+	shortlistUser(e,id){ 
 		shortlist(id);
 		Alert.success("Profile shortlisted Successfully!");
+		//e.parentNode.removeChild(e);
+		setTimeout(function(){
+			window.location.reload(1);
+		 }, 3000);
 	 } 
 	 
-	 unshortlistUser(id) { 
-		shortlist(id);
+	 unshortlistUser(e,id) { 
+		unshortlist(id);
 		Alert.success("Profile unshortlisted Successfully!");
+		setTimeout(function(){
+			window.location.reload(1);
+		 }, 3000);
 	 } 
 
 	setPage(page){
@@ -155,19 +368,19 @@ class NewMatches extends Component {
 					count: res.totalElements
                 });
             });
-			fetchWeeklyCount()    
-			.then((resWeeklyUsers) => {
-				this.setState({
-					weekly:resWeeklyUsers
-				});
-			});
+			// fetchWeeklyCount()    
+			// .then((resWeeklyUsers) => {
+			// 	this.setState({
+			// 		weekly:resWeeklyUsers
+			// 	});
+			// });
 
-			fetchMonthlyCount()    
-			.then((resMonthlyUsersCount) => {
-				this.setState({
-					monthly:resMonthlyUsersCount
-				});
-			});
+			// fetchMonthlyCount()    
+			// .then((resMonthlyUsersCount) => {
+			// 	this.setState({
+			// 		monthly:resMonthlyUsersCount
+			// 	});
+			// });
 
 			countwithImage()
 			.then((res)=> {
@@ -295,13 +508,28 @@ class NewMatches extends Component {
 						<td className="day_label1">Education :</td>
 						<td className="day_value closed"><span>{row.education}</span></td>
 					</tr>
+					<tr className="closed">
+						<td className="day_label1">Occupation :</td>
+						<td className="day_value closed"><span>{row.occupation}</span></td>
+					</tr>
 			    </tbody>
 		   </table>
-		   <div className="buttons">
-			   <div className="vertical">Send Mail</div>
+		   <div className='buttons' >
 			   <div className="vertical">
-			   {row.isShortlisted?"Shortlisted":"Shortlist"}
+				   <a href={`mailto:${row.email}?subject=Matrimony&body=Hi`} style={{color:"#fff"}}>
+					Send Mail
+					</a>
+				</div>
+			   {
+			   row.isShortlisted?
+			   <div className="vertical" onClick={e => this.unshortlistUser(e,row.id)}>
+			   Unshortlist
 			    </div>
+			   :
+			   <div className="vertical" onClick={e => this.shortlistUser(e,row.id)}>
+			   Shortlist
+			    </div>
+			   }
 			   <div className="vertical">Send Interest</div>
 		   </div>
 	    </div>
@@ -335,7 +563,7 @@ class NewMatches extends Component {
 		</li>
 		<li className="item1"><h3 className="m_2">Profile type</h3>
 		  <ul className="cute">
-			<li className="subitem1"><a href="javascript:void(0)" onClick={this.findByImageUrlIsNotNullOrderByIdDesc}>with Photo ({this.state.photoCount}) </a></li>
+			<li className="subitem1"><a href="javascript:void(0)" onClick={this.findByImage}>with Photo ({this.state.photoCount}) </a></li>
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Marital Status</h3>
@@ -347,7 +575,7 @@ class NewMatches extends Component {
 			onClick={() => this.findByMaritalStatus(this.state.maritalStatusList[keyOuter][0])}
 			>
 				{this.state.maritalStatusList[keyOuter][0]} 
-				({this.state.maritalStatusList[keyOuter][1]})</a></li>
+				&nbsp;({this.state.maritalStatusList[keyOuter][1]})</a></li>
           );
         
       })}
@@ -355,46 +583,112 @@ class NewMatches extends Component {
 		</li>
 		<li className="item1"><h3 className="m_2">Mother Tongue</h3>
 		  <ul className="cute">
-			<li className="subitem1"><a href="#">English </a></li>
+		  {Object.keys(this.state.motherToungeList).map(keyOuterMotherTounge => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterMotherTounge}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByMotherTounge(this.state.motherToungeList[keyOuterMotherTounge][0])}
+			>
+				{this.state.motherToungeList[keyOuterMotherTounge][0]} 
+				&nbsp;({this.state.motherToungeList[keyOuterMotherTounge][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Education</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Bachelors-Engineering </a></li>
-			<li className="subitem1"><a href="#">Masters-Engineering </a></li>
+		<ul className="cute">
+		  {Object.keys(this.state.educationList).map(keyOuterEducation => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterEducation}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByEducation(this.state.educationList[keyOuterEducation][0])}
+			>
+				{this.state.educationList[keyOuterEducation][0]} 
+				&nbsp;({this.state.educationList[keyOuterEducation][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Occupation</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Engineer-Non IT (2) </a></li>
-			<li className="subitem1"><a href="#">Software Professional (3)</a></li>
+		<ul className="cute">
+		  {Object.keys(this.state.occupationList).map(keyOuterOccupation => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterOccupation}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByOccupation(this.state.occupationList[keyOuterOccupation][0])}
+			>
+				{this.state.occupationList[keyOuterOccupation][0]} 
+				&nbsp;({this.state.occupationList[keyOuterOccupation][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Physical Status</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Normal (2) </a></li>
+		<ul className="cute">
+		  {Object.keys(this.state.physicalStatusList).map(keyOuterPhysicalStatus => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterPhysicalStatus}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByPhysicalStatus(this.state.physicalStatusList[keyOuterPhysicalStatus][0])}
+			>
+				{this.state.physicalStatusList[keyOuterPhysicalStatus][0]} 
+				&nbsp;({this.state.physicalStatusList[keyOuterPhysicalStatus][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Eating Habits</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Non Vegetarian (3)</a></li>
-			<li className="subitem1"><a href="#">Vegetarian (2)</a></li>
+		<ul className="cute">
+		  {Object.keys(this.state.dietList).map(keyOuterDiet => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterDiet}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByDiet(this.state.dietList[keyOuterDiet][0])}
+			>
+				{this.state.dietList[keyOuterDiet][0]} 
+				&nbsp;({this.state.dietList[keyOuterDiet][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Smoking</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Not Specified (3)</a></li>
+		<ul className="cute">
+		  {Object.keys(this.state.smokeList).map(keyOuterSmoke => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterSmoke}`}><a href="javascript:void(0)" 
+			onClick={() => this.findBySmoke(this.state.smokeList[keyOuterSmoke][0])}
+			>
+				{this.state.smokeList[keyOuterSmoke][0]?"Yes":"No"} 
+				&nbsp;({this.state.smokeList[keyOuterSmoke][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Drinking</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Not Specified (3)</a></li>
-			<li className="subitem1"><a href="#">Never Drinks (3)</a></li>
+		<ul className="cute">
+		  {Object.keys(this.state.drinkList).map(keyOuterDrink => {
+        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
+          return (
+            <li className="subitem1" key={`${keyOuterDrink}`}><a href="javascript:void(0)" 
+			onClick={() => this.findByDrink(this.state.drinkList[keyOuterDrink][0])}
+			>
+				{this.state.drinkList[keyOuterDrink][0]?"Yes":"No"} 
+				&nbsp;({this.state.drinkList[keyOuterDrink][1]})</a></li>
+          );
+        
+      })}
 		  </ul>
 		</li>
 		<li className="item1"><h3 className="m_2">Profile Created by</h3>
 		  <ul className="cute">
-			<li className="subitem1"><a href="#">Self (1)</a></li>
+			<li className="subitem1"><a href="#">Self</a></li>
 		  </ul>
 		</li>
 	  </ul>
