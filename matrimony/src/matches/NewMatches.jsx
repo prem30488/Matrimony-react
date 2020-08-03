@@ -5,8 +5,8 @@ import {fetchSolrEntitiesDesc,fetchByMaritalStatus,fetchByMotherTounge,
 	fetchBySmoke, fetchByDrink,
 	getCurrentUser,fetchWeeklyCount,
 	getDistinctMaritalStatus, getDistinctMotherTounge,
-	getWeeklyEntities,getMonthlyEntities,findByImageUrl,
-	fetchMonthlyCount,countwithImage, shortlist,unshortlist,
+	getWeeklyEntities,getMonthlyEntities,findByImageUrl, view,
+	fetchMonthlyCount,countwithImage, shortlist,unshortlist,sendInterestTo,
 	getDistinctEducation, getDistinctOccupation,getDistinctPhysicalStatus,
 	getDistinctDiet, getDistinctSmoke, getDistinctDrink
 } from '../util/APIUtils';
@@ -33,7 +33,10 @@ class NewMatches extends Component {
 			physicalStatusList: [],
 			dietList : [],
 			smokeList : [],
-			drinkList : []
+			drinkList : [],
+			alreadyViewed : false,
+			alreadyShortlisted: false,
+			withPhotoOnly:false,
         }
         this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,7 +44,9 @@ class NewMatches extends Component {
         this.handleChangePage = this.handleChangePage.bind(this);
 		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
 		this.shortlistUser = this.shortlistUser.bind(this);
+		this.viewUser = this.viewUser.bind(this);
 		this.unshortlistUser = this.unshortlistUser.bind(this);
+		this.sendInterest = this.sendInterest.bind(this);
 		this.setWeeklyUsers = this.setWeeklyUsers.bind(this);
 		this.setMonthlyUsers = this.setMonthlyUsers.bind(this);
 		this.findByImage = this.findByImage.bind(this);
@@ -73,6 +78,27 @@ class NewMatches extends Component {
 		this.fetchDistinctSmoke();
 		this.fetchDistinctDrink();
 	}
+
+	toggleChange = () => {
+		this.setState({
+		  alreadyViewed: !this.state.alreadyViewed,
+		});
+		this.reloadUserList();
+	  }
+
+	  toggleChange2 = () => {
+		this.setState({
+		  alreadyShortlisted: !this.state.alreadyShortlisted,
+		});
+		this.reloadUserList();
+	  }
+
+	  toggleChange3 = () => {
+		this.setState({
+		  withPhotoOnly: !this.state.withPhotoOnly,
+		});
+		this.reloadUserList();
+	  }
 
 	fetchDistinctMaritalStatus(){
 		getDistinctMaritalStatus()
@@ -202,7 +228,7 @@ class NewMatches extends Component {
 					users:resUsersWithPhoto.data,
 					count: resUsersWithPhoto.length,
 					page:0,
-					rowsPerPage:5
+					rowsPerPage:5,
 				});
 			});
 		
@@ -312,6 +338,18 @@ class NewMatches extends Component {
 			window.location.reload(1);
 		 }, 3000);
 	 } 
+
+	 viewUser(e,id){ 
+		view(id);
+		Alert.success("Profile view in progress!");
+		window.localStorage.setItem("profileId", id);
+        this.props.history.push('/viewProfile');
+		//Alert.success("Profile shortlisted Successfully!");
+		//e.parentNode.removeChild(e);
+		// setTimeout(function(){
+		// 	window.location.reload(1);
+		//  }, 3000);
+	 } 
 	 
 	 unshortlistUser(e,id) { 
 		unshortlist(id);
@@ -320,6 +358,14 @@ class NewMatches extends Component {
 			window.location.reload(1);
 		 }, 3000);
 	 } 
+
+	 sendInterest(e,id){ 
+		sendInterestTo(id);
+		Alert.success("Interest sent Successfully!");
+		setTimeout(function(){
+			window.location.reload(1);
+		 }, 3000);
+	 }
 
 	setPage(page){
         //console.log('setpage called',page);
@@ -409,9 +455,9 @@ class NewMatches extends Component {
         const inputName = target.name;        
         const inputValue = target.value;
 
-        this.setState({
-            [inputName] : inputValue
-        });        
+        //this.setState({
+        //    [inputName] : inputValue
+        //});        
     }
 
 	editUser(id) {
@@ -455,13 +501,25 @@ class NewMatches extends Component {
 	  <div className="form_but2">
 		<label className="col-md-2 control-lable1" htmlFor="sex">Don't Show : </label>
 		<div className="col-md-10 form_radios">
-			<input type="checkbox" className="radio_1" /> Don't show already viewed &nbsp;&nbsp;&nbsp;
-			<input type="checkbox" className="radio_1" checked="checked" /> Don't show already contacted &nbsp;&nbsp;&nbsp;
-			<input type="checkbox" className="radio_1" checked="checked" /> Show profiles with photo
+			<input type="checkbox" className="radio_1" 
+			checked={this.state.alreadyViewed}
+			onChange={this.toggleChange}
+			/> Don't show already viewed &nbsp;&nbsp;&nbsp;
+			<input type="checkbox" className="radio_1" 
+			checked={this.state.alreadyShortlisted}
+			onChange={this.toggleChange2}
+			/> Don't show already shortlisted &nbsp;&nbsp;&nbsp;
+			<input type="checkbox" className="radio_1" 
+			checked={this.state.withPhotoOnly}
+			onChange={this.toggleChange3}
+			/> Only show profiles with photo
 		</div>
 		<div className="clearfix"> </div>
 	  </div>
 	  {this.state.users.map(row => (
+		  (this.state.alreadyViewed && row.isViewed ) || (this.state.alreadyShortlisted && row.isShortlisted )
+		 || (this.state.withPhotoOnly && row.image_url!='') 
+		  ?<div></div>:
                             <div className="profile_top" key={row.id}><a href="#">
       <h2>{row.id} | Profile Created by {row.profileCreatedBy}</h2>
 	    <div className="col-sm-3 profile_left-top">
@@ -530,11 +588,22 @@ class NewMatches extends Component {
 			   Shortlist
 			    </div>
 			   }
-			   <div className="vertical">Send Interest</div>
+			   <div className="vertical" onClick={e => this.sendInterest(e,row.id)}>Send Interest</div>
+			   {
+			   row.isViewed?
+			   <div className="vertical" onClick={e => this.viewUser(e,row.id)}>
+			   Already Viewed
+			    </div>
+			   :
+			   <div className="vertical" onClick={e => this.viewUser(e,row.id)}>
+			   View User
+			    </div>
+			   }
 		   </div>
 	    </div>
 	    <div className="clearfix"> </div>
     </a></div>
+	
 
                         ))}
 						 <TablePagination

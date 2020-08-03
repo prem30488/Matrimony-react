@@ -468,9 +468,25 @@ export function shortlist(id){
     });
 }
 
+export function view(id){
+    return request({
+        url: API_BASE_URL + "/api/user/profile/view",
+        body: JSON.stringify({"id":id}),
+        method: 'POST'
+    });
+}
+
 export function unshortlist(id){
     return request({
         url: API_BASE_URL + "/api/user/profile/unshortlist",
+        body: JSON.stringify({"id":id}),
+        method: 'POST'
+    });
+}
+
+export function sendInterestTo(id){
+    return request({
+        url: API_BASE_URL + "/api/user/profile/sendInterest",
         body: JSON.stringify({"id":id}),
         method: 'POST'
     });
