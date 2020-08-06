@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 //import solrReducer from "./solr-reducer";
-import {fetchSolrEntitiesDesc,fetchByMaritalStatus,fetchByMotherTounge,
+import {fetchSolrEntitiesViewedNotShortlistedDesc,fetchByMaritalStatus,fetchByMotherTounge,
 	fetchByEducation, fetchByOccupation,fetchByPhysicalStatus,fetchByDiet,
 	fetchBySmoke, fetchByDrink,
 	getCurrentUser,fetchWeeklyCount,
@@ -13,7 +13,7 @@ import {fetchSolrEntitiesDesc,fetchByMaritalStatus,fetchByMotherTounge,
 import TablePagination from '@material-ui/core/TablePagination';
 import AppFooter from "../common/AppFooter";
 import Alert from 'react-s-alert';
-class NewMatches extends Component {
+class ViewedNotContacted extends Component {
 
     constructor(props) {
         super(props);
@@ -21,7 +21,7 @@ class NewMatches extends Component {
         this.state = {
             users:[],
             page:0,
-			rowsPerPage:10,
+			rowsPerPage:5,
 			count:0,
 			weekly:0,
 			monthly:0,
@@ -405,7 +405,7 @@ class NewMatches extends Component {
     }
        
     reloadUserList() {
-        fetchSolrEntitiesDesc(this.state.page,this.state.rowsPerPage)
+        fetchSolrEntitiesViewedNotShortlistedDesc(this.state.page,this.state.rowsPerPage)
             .then((res) => {
                 //console.log(JSON.stringify(res.content));
                 
@@ -414,26 +414,7 @@ class NewMatches extends Component {
 					count: res.totalElements
                 });
             });
-			// fetchWeeklyCount()    
-			// .then((resWeeklyUsers) => {
-			// 	this.setState({
-			// 		weekly:resWeeklyUsers
-			// 	});
-			// });
-
-			// fetchMonthlyCount()    
-			// .then((resMonthlyUsersCount) => {
-			// 	this.setState({
-			// 		monthly:resMonthlyUsersCount
-			// 	});
-			// });
-
-			countwithImage()
-			.then((res)=> {
-				this.setState({
-					photoCount:res
-				});
-			});
+			
     }
 	
 	handleChangePage = (event, newPage) => {
@@ -493,13 +474,13 @@ class NewMatches extends Component {
      <ul>
         <a href="/"><i className="fa fa-home home_1"></i></a>
         <span className="divider">&nbsp;|&nbsp;</span>
-        <li className="current-page">New Matches</li>
+        <li className="current-page">Viewed My Profile &amp; Not Shortlisted</li>
      </ul>
    </div>
    <div className="col-md-9 profile_left2">
      
 	  <div className="form_but2">
-		<label className="col-md-2 control-lable1" htmlFor="sex">Don't Show : </label>
+		{/* <label className="col-md-2 control-lable1" htmlFor="sex">Don't Show : </label>
 		<div className="col-md-10 form_radios">
 			<input type="checkbox" className="radio_1" 
 			checked={this.state.alreadyViewed}
@@ -513,13 +494,11 @@ class NewMatches extends Component {
 			checked={this.state.withPhotoOnly}
 			onChange={this.toggleChange3}
 			/> Only show profiles with photo
-		</div>
+		</div> */}
 		<div className="clearfix"> </div>
 	  </div>
 	  {this.state.users.map(row => (
-		  (this.state.alreadyViewed && row.isViewed ) || (this.state.alreadyShortlisted && row.isShortlisted )
-		 || (this.state.withPhotoOnly && row.image_url!='') 
-		  ?<div></div>:
+		  
                             <div className="profile_top" key={row.id}><a href="#">
       <h2>{row.id} | Profile Created by {row.profileCreatedBy}</h2>
 	    <div className="col-sm-3 profile_left-top">
@@ -527,7 +506,7 @@ class NewMatches extends Component {
 	    </div>
 	    <div className="col-sm-3">
 	      <ul className="login_details1">
-			 <li>Last Login : 1 hours ago</li>
+	  <li>Last Login : 1 hours ago  {row.isViewedMe}</li>
 			 <li><p>{row.about}</p></li>
 		  </ul>
 	    </div>
@@ -622,146 +601,7 @@ class NewMatches extends Component {
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
   </div>
-  <div className="col-md-3 match_right">
-    <ul className="menu">
-		<li className="item1"><h3 className="m_2">Show Profiles Created</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="javascript:void(0)" onClick={this.setWeeklyUsers}>within a week ({this.state.weekly}) </a></li>
-			<li className="subitem2"><a href="javascript:void(0)" onClick={this.setMonthlyUsers}>within a month ({this.state.monthly})</a></li>
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Profile type</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="javascript:void(0)" onClick={this.findByImage}>with Photo ({this.state.photoCount}) </a></li>
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Marital Status</h3>
-		  <ul className="cute">
-		  {Object.keys(this.state.maritalStatusList).map(keyOuter => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuter}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByMaritalStatus(this.state.maritalStatusList[keyOuter][0])}
-			>
-				{this.state.maritalStatusList[keyOuter][0]} 
-				&nbsp;({this.state.maritalStatusList[keyOuter][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Mother Tongue</h3>
-		  <ul className="cute">
-		  {Object.keys(this.state.motherToungeList).map(keyOuterMotherTounge => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterMotherTounge}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByMotherTounge(this.state.motherToungeList[keyOuterMotherTounge][0])}
-			>
-				{this.state.motherToungeList[keyOuterMotherTounge][0]} 
-				&nbsp;({this.state.motherToungeList[keyOuterMotherTounge][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Education</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.educationList).map(keyOuterEducation => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterEducation}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByEducation(this.state.educationList[keyOuterEducation][0])}
-			>
-				{this.state.educationList[keyOuterEducation][0]} 
-				&nbsp;({this.state.educationList[keyOuterEducation][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Occupation</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.occupationList).map(keyOuterOccupation => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterOccupation}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByOccupation(this.state.occupationList[keyOuterOccupation][0])}
-			>
-				{this.state.occupationList[keyOuterOccupation][0]} 
-				&nbsp;({this.state.occupationList[keyOuterOccupation][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Physical Status</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.physicalStatusList).map(keyOuterPhysicalStatus => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterPhysicalStatus}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByPhysicalStatus(this.state.physicalStatusList[keyOuterPhysicalStatus][0])}
-			>
-				{this.state.physicalStatusList[keyOuterPhysicalStatus][0]} 
-				&nbsp;({this.state.physicalStatusList[keyOuterPhysicalStatus][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Eating Habits</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.dietList).map(keyOuterDiet => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterDiet}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByDiet(this.state.dietList[keyOuterDiet][0])}
-			>
-				{this.state.dietList[keyOuterDiet][0]} 
-				&nbsp;({this.state.dietList[keyOuterDiet][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Smoking</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.smokeList).map(keyOuterSmoke => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterSmoke}`}><a href="javascript:void(0)" 
-			onClick={() => this.findBySmoke(this.state.smokeList[keyOuterSmoke][0])}
-			>
-				{this.state.smokeList[keyOuterSmoke][0]?"Yes":"No"} 
-				&nbsp;({this.state.smokeList[keyOuterSmoke][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Drinking</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.drinkList).map(keyOuterDrink => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterDrink}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByDrink(this.state.drinkList[keyOuterDrink][0])}
-			>
-				{this.state.drinkList[keyOuterDrink][0]?"Yes":"No"} 
-				&nbsp;({this.state.drinkList[keyOuterDrink][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Profile Created by</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Self</a></li>
-		  </ul>
-		</li>
-	  </ul>
-   </div>
+  
    <div className="clearfix"> </div>
   </div>
 </div>
@@ -776,4 +616,4 @@ class NewMatches extends Component {
 }
 
 
-export default NewMatches;
+export default ViewedNotContacted;

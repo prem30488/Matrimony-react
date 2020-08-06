@@ -12,9 +12,14 @@ import FamilyProfile from './user/profile/FamilyProfile';
 import AstroProfile from './user/profile/AstroProfile';
 import CareerProfile from './user/profile/CareerProfile';
 import PartnerPreferenceProfile from './user/profile/PartnerPreferenceProfile';
-import NewMatches from './matches/NewMatches';
 import ViewProfile from './user/profile/ViewProfile';
+
+import NewMatches from './matches/NewMatches';
+import ViewedMyProfile from './matches/ViewedMyProfile';
+import ViewedNotContacted from './matches/ViewedNotContacted';
+import ShortlistedProfiles from './matches/ShortlistedProfiles';
 import AdvancedSearch from './search/AdvancedSearch';
+import Search from './search/Search';
 import Contact from './user/contact/Contact';
 import OAuth2RedirectHandler from './user/oauth2/OAuth2RedirectHandler';
 import NotFound from './common/NotFound';
@@ -109,8 +114,17 @@ class App extends Component {
               component={NewMatches}></Route>
 			  <Route exact path="/viewProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
               component={ViewProfile}></Route>
+			  <Route exact path="/viewedMyProfile" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={ViewedMyProfile}></Route>
+			  <Route exact path="/viewedNotContacted" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={ViewedNotContacted}></Route>
+			  <Route exact path="/shortlistedProfiles" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={ShortlistedProfiles}></Route>
+			  
 			  <Route exact path="/advancedSearch" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
               component={AdvancedSearch}></Route>
+			  <Route exact path="/search" authenticated={this.state.authenticated} currentUser={this.state.currentUser} {...this.props}
+              component={Search}></Route>
 	  		<Route path="/login"
               render={(props) => <Login authenticated={this.state.authenticated} 
               onlogin={this.loadCurrentlyLoggedInUser} 

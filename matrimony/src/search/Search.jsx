@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 //import solrReducer from "./solr-reducer";
-import {fetchSolrEntitiesDesc,fetchByMaritalStatus,fetchByMotherTounge,
+import {fetchSolrEntitiesShortlistedDesc,fetchByMaritalStatus,fetchByMotherTounge,
 	fetchByEducation, fetchByOccupation,fetchByPhysicalStatus,fetchByDiet,
 	fetchBySmoke, fetchByDrink,
 	getCurrentUser,fetchWeeklyCount,
@@ -13,7 +13,7 @@ import {fetchSolrEntitiesDesc,fetchByMaritalStatus,fetchByMotherTounge,
 import TablePagination from '@material-ui/core/TablePagination';
 import AppFooter from "../common/AppFooter";
 import Alert from 'react-s-alert';
-class NewMatches extends Component {
+class Search extends Component {
 
     constructor(props) {
         super(props);
@@ -21,7 +21,7 @@ class NewMatches extends Component {
         this.state = {
             users:[],
             page:0,
-			rowsPerPage:10,
+			rowsPerPage:5,
 			count:0,
 			weekly:0,
 			monthly:0,
@@ -405,7 +405,7 @@ class NewMatches extends Component {
     }
        
     reloadUserList() {
-        fetchSolrEntitiesDesc(this.state.page,this.state.rowsPerPage)
+        fetchSolrEntitiesShortlistedDesc(this.state.page,this.state.rowsPerPage)
             .then((res) => {
                 //console.log(JSON.stringify(res.content));
                 
@@ -414,26 +414,7 @@ class NewMatches extends Component {
 					count: res.totalElements
                 });
             });
-			// fetchWeeklyCount()    
-			// .then((resWeeklyUsers) => {
-			// 	this.setState({
-			// 		weekly:resWeeklyUsers
-			// 	});
-			// });
-
-			// fetchMonthlyCount()    
-			// .then((resMonthlyUsersCount) => {
-			// 	this.setState({
-			// 		monthly:resMonthlyUsersCount
-			// 	});
-			// });
-
-			countwithImage()
-			.then((res)=> {
-				this.setState({
-					photoCount:res
-				});
-			});
+			
     }
 	
 	handleChangePage = (event, newPage) => {
@@ -493,13 +474,13 @@ class NewMatches extends Component {
      <ul>
         <a href="/"><i className="fa fa-home home_1"></i></a>
         <span className="divider">&nbsp;|&nbsp;</span>
-        <li className="current-page">New Matches</li>
+        <li className="current-page">Regular Search</li>
      </ul>
    </div>
    <div className="col-md-9 profile_left2">
      
 	  <div className="form_but2">
-		<label className="col-md-2 control-lable1" htmlFor="sex">Don't Show : </label>
+		{/* <label className="col-md-2 control-lable1" htmlFor="sex">Don't Show : </label>
 		<div className="col-md-10 form_radios">
 			<input type="checkbox" className="radio_1" 
 			checked={this.state.alreadyViewed}
@@ -513,255 +494,217 @@ class NewMatches extends Component {
 			checked={this.state.withPhotoOnly}
 			onChange={this.toggleChange3}
 			/> Only show profiles with photo
-		</div>
+		</div> */}
 		<div className="clearfix"> </div>
 	  </div>
-	  {this.state.users.map(row => (
-		  (this.state.alreadyViewed && row.isViewed ) || (this.state.alreadyShortlisted && row.isShortlisted )
-		 || (this.state.withPhotoOnly && row.image_url!='') 
-		  ?<div></div>:
-                            <div className="profile_top" key={row.id}><a href="#">
-      <h2>{row.id} | Profile Created by {row.profileCreatedBy}</h2>
-	    <div className="col-sm-3 profile_left-top">
-	    	<img src={`images/${row.id}.jpg`} className="img-responsive" alt=""/>
-	    </div>
-	    <div className="col-sm-3">
-	      <ul className="login_details1">
-			 <li>Last Login : 1 hours ago</li>
-			 <li><p>{row.about}</p></li>
-		  </ul>
-	    </div>
-	    <div className="col-sm-6">
-	    	<table className="table_working_hours">
-	        	<tbody>
-					<tr className="opened_1">
-						<td className="day_label1">Name :</td>
-						<td className="day_value"><a onClick={() => this.editUser(row.id)}>{row.name}</a></td>
-					</tr>
-	        		<tr className="opened_1">
-						<td className="day_label1">Age / Height :</td>
-						<td className="day_value">{row.age}</td>
-					</tr>
-				    <tr className="opened">
-						<td className="day_label1">Last Login :</td>
-						<td className="day_value">1 hours ago</td>
-					</tr>
-				    <tr className="opened">
-						<td className="day_label1">Religion :</td>
-						<td className="day_value">{row.religion}</td>
-					</tr>
-				    <tr className="opened">
-						<td className="day_label1">Marital Status :</td>
-	  					<td className="day_value">{row.maritalStatus}</td>
-					</tr>
-				    <tr className="opened">
-						<td className="day_label1">Location :</td>
-						<td className="day_value">{row.locationOfHome}</td>
-					</tr>
-				    <tr className="closed">
-						<td className="day_label1">Profile Created by :</td>
-						<td className="day_value closed"><span>{row.profileCreatedBy}</span></td>
-					</tr>
-				    <tr className="closed">
-						<td className="day_label1">Education :</td>
-						<td className="day_value closed"><span>{row.education}</span></td>
-					</tr>
-					<tr className="closed">
-						<td className="day_label1">Occupation :</td>
-						<td className="day_value closed"><span>{row.occupation}</span></td>
-					</tr>
-			    </tbody>
-		   </table>
-		   <div className='buttons' >
-			   <div className="vertical">
-				   <a href={`mailto:${row.email}?subject=Matrimony&body=Hi`} style={{color:"#fff"}}>
-					Send Mail
-					</a>
-				</div>
-			   {
-			   row.isShortlisted?
-			   <div className="vertical" onClick={e => this.unshortlistUser(e,row.id)}>
-			   Unshortlist
-			    </div>
-			   :
-			   <div className="vertical" onClick={e => this.shortlistUser(e,row.id)}>
-			   Shortlist
-			    </div>
-			   }
-			   <div className="vertical" onClick={e => this.sendInterest(e,row.id)}>Send Interest</div>
-			   {
-			   row.isViewed?
-			   <div className="vertical" onClick={e => this.viewUser(e,row.id)}>
-			   Already Viewed
-			    </div>
-			   :
-			   <div className="vertical" onClick={e => this.viewUser(e,row.id)}>
-			   View User
-			    </div>
-			   }
-		   </div>
-	    </div>
-	    <div className="clearfix"> </div>
-    </a></div>
-	
-
-                        ))}
-						 <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          component="div"
-          count={this.state.count}
-          rowsPerPage={this.state.rowsPerPage}
-          page={this.state.page}
-          backIconButtonProps={{
-            'aria-label': 'previous page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'next page',
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
+	  <form>	
+   <div class="form_but1">
+	<label class="col-sm-5 control-lable1" for="sex">Gender : </label>
+	<div class="col-sm-7 form_radios">
+		<input type="radio" class="radio_1" /> Male &nbsp;&nbsp;
+		<input type="radio" class="radio_1" checked="checked" /> Female
+		
+		{/* <hr />
+		<p id="sel"></p><br />
+		<input id="btnRadio" type="button" value="Get Selected Value" /> */}
+	</div>
+	<div class="clearfix"> </div>
   </div>
-  <div className="col-md-3 match_right">
-    <ul className="menu">
-		<li className="item1"><h3 className="m_2">Show Profiles Created</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="javascript:void(0)" onClick={this.setWeeklyUsers}>within a week ({this.state.weekly}) </a></li>
-			<li className="subitem2"><a href="javascript:void(0)" onClick={this.setMonthlyUsers}>within a month ({this.state.monthly})</a></li>
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Profile type</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="javascript:void(0)" onClick={this.findByImage}>with Photo ({this.state.photoCount}) </a></li>
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Marital Status</h3>
-		  <ul className="cute">
-		  {Object.keys(this.state.maritalStatusList).map(keyOuter => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuter}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByMaritalStatus(this.state.maritalStatusList[keyOuter][0])}
-			>
-				{this.state.maritalStatusList[keyOuter][0]} 
-				&nbsp;({this.state.maritalStatusList[keyOuter][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Mother Tongue</h3>
-		  <ul className="cute">
-		  {Object.keys(this.state.motherToungeList).map(keyOuterMotherTounge => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterMotherTounge}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByMotherTounge(this.state.motherToungeList[keyOuterMotherTounge][0])}
-			>
-				{this.state.motherToungeList[keyOuterMotherTounge][0]} 
-				&nbsp;({this.state.motherToungeList[keyOuterMotherTounge][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Education</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.educationList).map(keyOuterEducation => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterEducation}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByEducation(this.state.educationList[keyOuterEducation][0])}
-			>
-				{this.state.educationList[keyOuterEducation][0]} 
-				&nbsp;({this.state.educationList[keyOuterEducation][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Occupation</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.occupationList).map(keyOuterOccupation => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterOccupation}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByOccupation(this.state.occupationList[keyOuterOccupation][0])}
-			>
-				{this.state.occupationList[keyOuterOccupation][0]} 
-				&nbsp;({this.state.occupationList[keyOuterOccupation][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Physical Status</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.physicalStatusList).map(keyOuterPhysicalStatus => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterPhysicalStatus}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByPhysicalStatus(this.state.physicalStatusList[keyOuterPhysicalStatus][0])}
-			>
-				{this.state.physicalStatusList[keyOuterPhysicalStatus][0]} 
-				&nbsp;({this.state.physicalStatusList[keyOuterPhysicalStatus][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Eating Habits</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.dietList).map(keyOuterDiet => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterDiet}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByDiet(this.state.dietList[keyOuterDiet][0])}
-			>
-				{this.state.dietList[keyOuterDiet][0]} 
-				&nbsp;({this.state.dietList[keyOuterDiet][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Smoking</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.smokeList).map(keyOuterSmoke => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterSmoke}`}><a href="javascript:void(0)" 
-			onClick={() => this.findBySmoke(this.state.smokeList[keyOuterSmoke][0])}
-			>
-				{this.state.smokeList[keyOuterSmoke][0]?"Yes":"No"} 
-				&nbsp;({this.state.smokeList[keyOuterSmoke][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Drinking</h3>
-		<ul className="cute">
-		  {Object.keys(this.state.drinkList).map(keyOuterDrink => {
-        //return Object.keys(this.state.maritalStatusList[keyOuter]).map(keyInner => {
-          return (
-            <li className="subitem1" key={`${keyOuterDrink}`}><a href="javascript:void(0)" 
-			onClick={() => this.findByDrink(this.state.drinkList[keyOuterDrink][0])}
-			>
-				{this.state.drinkList[keyOuterDrink][0]?"Yes":"No"} 
-				&nbsp;({this.state.drinkList[keyOuterDrink][1]})</a></li>
-          );
-        
-      })}
-		  </ul>
-		</li>
-		<li className="item1"><h3 className="m_2">Profile Created by</h3>
-		  <ul className="cute">
-			<li className="subitem1"><a href="#">Self</a></li>
-		  </ul>
-		</li>
-	  </ul>
-   </div>
+  <div class="form_but1">
+	<label class="col-sm-5 control-lable1" for="sex">Marital Status : </label>
+	<div class="col-sm-7 form_radios">
+		<input type="checkbox" class="radio_1" /> Single &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" checked="checked" /> Divorced &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" value="Cheese" /> Widowed &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" value="Cheese" /> Separated &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" value="Cheese" /> Any
+	</div>
+	<div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+    <label class="col-sm-5 control-lable1" for="sex">Country : </label>
+    <div class="col-sm-7 form_radios">
+      <div class="select-block1">
+        <select>
+            <option value="">Country</option>
+            <option value="">Japan</option>
+            <option value="">Kenya</option>
+            <option value="">Dubai</option>
+            <option value="">Italy</option>
+            <option value="">Greece</option> 
+            <option value="">Iceland</option> 
+            <option value="">China</option> 
+            <option value="">Doha</option> 
+            <option value="">Irland</option> 
+            <option value="">Srilanka</option> 
+            <option value="">Russia</option> 
+            <option value="">Hong Kong</option> 
+            <option value="">Germany</option>
+            <option value="">Canada</option>  
+            <option value="">Mexico</option> 
+            <option value="">Nepal</option>
+            <option value="">Norway</option> 
+            <option value="">Oman</option>
+            <option value="">Pakistan</option>  
+            <option value="">Kuwait</option> 
+            <option value="">Indonesia</option>  
+            <option value="">Spain</option>
+            <option value="">Thailand</option>  
+            <option value="">Saudi Arabia</option> 
+            <option value="">Poland</option> 
+        </select>
+      </div>
+    </div>
+    <div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+    <label class="col-sm-5 control-lable1" for="sex">District / City : </label>
+    <div class="col-sm-7 form_radios">
+      <div class="select-block1">
+        <select>
+            <option value="">District / City</option>
+            <option value="">Japan</option>
+            <option value="">Kenya</option>
+            <option value="">Dubai</option>
+            <option value="">Italy</option>
+            <option value="">Greece</option> 
+            <option value="">Iceland</option> 
+            <option value="">China</option> 
+            <option value="">Doha</option> 
+            <option value="">Irland</option> 
+            <option value="">Srilanka</option> 
+            <option value="">Russia</option> 
+            <option value="">Hong Kong</option> 
+            <option value="">Germany</option>
+            <option value="">Canada</option>  
+            <option value="">Mexico</option> 
+            <option value="">Nepal</option>
+            <option value="">Norway</option> 
+            <option value="">Oman</option>
+            <option value="">Pakistan</option>  
+            <option value="">Kuwait</option> 
+            <option value="">Indonesia</option>  
+            <option value="">Spain</option>
+            <option value="">Thailand</option>  
+            <option value="">Saudi Arabia</option> 
+            <option value="">Poland</option> 
+        </select>
+      </div>
+    </div>
+    <div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+    <label class="col-sm-5 control-lable1" for="sex">State : </label>
+    <div class="col-sm-7 form_radios">
+      <div class="select-block1">
+        <select>
+            <option value="">State</option>
+            <option value="">Japan</option>
+            <option value="">Kenya</option>
+            <option value="">Dubai</option>
+            <option value="">Italy</option>
+            <option value="">Greece</option> 
+            <option value="">Iceland</option> 
+            <option value="">China</option> 
+            <option value="">Doha</option> 
+            <option value="">Irland</option> 
+            <option value="">Srilanka</option> 
+            <option value="">Russia</option> 
+            <option value="">Hong Kong</option> 
+            <option value="">Germany</option>
+            <option value="">Canada</option>  
+            <option value="">Mexico</option> 
+            <option value="">Nepal</option>
+            <option value="">Norway</option> 
+            <option value="">Oman</option>
+            <option value="">Pakistan</option>  
+            <option value="">Kuwait</option> 
+            <option value="">Indonesia</option>  
+            <option value="">Spain</option>
+            <option value="">Thailand</option>  
+            <option value="">Saudi Arabia</option> 
+            <option value="">Poland</option> 
+        </select>
+      </div>
+    </div>
+    <div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+    <label class="col-sm-5 control-lable1" for="sex">Religion : </label>
+    <div class="col-sm-7 form_radios">
+      <div class="select-block1">
+        <select>
+            <option value="">Hindu</option>
+            <option value="">Sikh</option>
+            <option value="">Jain-All</option>
+            <option value="">Jain-Digambar</option>
+            <option value="">Jain-Others</option>
+            <option value="">Muslim-All</option> 
+            <option value="">Muslim-Shia</option> 
+            <option value="">Muslim-Sunni</option> 
+            <option value="">Muslim-Others</option> 
+            <option value="">Christian-All</option> 
+            <option value="">Christian-Catholic</option> 
+            <option value="">Jewish</option> 
+            <option value="">Inter-Religion</option> 
+        </select>
+      </div>
+    </div>
+    <div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+    <label class="col-sm-5 control-lable1" for="sex">Mother Tongue : </label>
+    <div class="col-sm-7 form_radios">
+      <div class="select-block1">
+        <select>
+            <option value="">English</option>
+            <option value="">French</option>
+            <option value="">Telugu</option>
+            <option value="">Bengali</option>
+            <option value="">Bihari</option>
+            <option value="">Hindi</option> 
+            <option value="">Koshali</option> 
+            <option value="">Khasi</option> 
+            <option value="">Tamil</option> 
+            <option value="">Urdu</option> 
+            <option value="">Manipuri</option> 
+        </select>
+      </div>
+    </div>
+    <div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+	<label class="col-sm-5 control-lable1" for="sex">Show Profile : </label>
+	<div class="col-sm-7 form_radios">
+		<input type="checkbox" class="radio_1" /> with Photo &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" checked="checked" /> with Horoscope
+	</div>
+	<div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+	<label class="col-sm-5 control-lable1" for="sex">Don't Show : </label>
+	<div class="col-sm-7 form_radios">
+		<input type="checkbox" class="radio_1" /> Ignored Profiles &nbsp;&nbsp;
+		<input type="checkbox" class="radio_1" checked="checked" /> Profiles already Contacted
+	</div>
+	<div class="clearfix"> </div>
+  </div>
+  <div class="form_but1">
+	<label class="col-sm-5 control-lable1" for="sex">Age : </label>
+	<div class="col-sm-7 form_radios">
+	  <div class="col-sm-5 input-group1">
+        <input class="form-control has-dark-background" name="28" id="slider-name" placeholder="28" type="text" required="" />
+      </div>
+      <div class="col-sm-5 input-group1">
+        <input class="form-control has-dark-background" name="40" id="slider-name" placeholder="40" type="text" required="" />
+      </div>
+      <div class="clearfix"> </div>
+	</div>
+	<div class="clearfix"> </div>
+  </div>
+ </form>
+  </div>
+  
    <div className="clearfix"> </div>
   </div>
 </div>
@@ -776,4 +719,4 @@ class NewMatches extends Component {
 }
 
 
-export default NewMatches;
+export default Search;

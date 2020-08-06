@@ -71,16 +71,16 @@ class AppHeader extends Component {
 		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Matches<span className="caret"></span></a>
 		              <ul className="dropdown-menu" role="menu">
 		                <li><a href="/newMatches">New Matches</a></li>
-		                <li><a href="viewed-profile.html">Who Viewed my Profile</a></li>
-		                <li><a href="viewed-not_contacted.html">Viewed & not Contacted</a></li>
-		                <li><a href="members.html">Premium Members</a></li>
-		                <li><a href="shortlisted.html">Shortlisted Profile</a></li>
+		                <li><a href="/viewedMyProfile">Who Viewed my Profile</a></li>
+		                <li><a href="/viewedNotContacted">Viewed &amp; not Contacted</a></li>
+		                {/* <li><a href="members.html">Premium Members</a></li> */}
+		                <li><a href="/shortlistedProfiles">Shortlisted Profile</a></li>
 		              </ul>
 		            </li>
 					<li className="dropdown">
 		              <a href="#" className="dropdown-toggle" data-toggle="dropdown">Search<span className="caret"></span></a>
 		              <ul className="dropdown-menu" role="menu">
-		                <li><a href="search.html">Regular Search</a></li>
+		                <li><a href="/search">Regular Search</a></li>
 						<li><a href="/advancedSearch">Advanced Search</a></li>
 		                <li><a href="profile.html">Recently Viewed Profiles</a></li>
 		                <li><a href="search-id.html">Search By Profile ID</a></li>

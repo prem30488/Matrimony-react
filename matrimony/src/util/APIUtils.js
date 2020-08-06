@@ -367,6 +367,27 @@ export function fetchSolrEntitiesDesc(page,size) {
     });
 }
 
+export function fetchSolrEntitiesViewedDesc(page,size) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/getAllViewedMe?page="+page+"&size="+size+"&sort=id,desc",
+        method: 'GET'
+    });
+}
+
+export function fetchSolrEntitiesViewedNotShortlistedDesc(page,size) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/getAllViewedMeNotShortlisted?page="+page+"&size="+size+"&sort=id,desc",
+        method: 'GET'
+    });
+}
+
+export function fetchSolrEntitiesShortlistedDesc(page,size) {
+    return request({
+        url: API_BASE_URL + "/api/solrSearchEntity/getAllShortlisted?page="+page+"&size="+size+"&sort=id,desc",
+        method: 'GET'
+    });
+}
+
 export function fetchByMaritalStatus(maritalStatus,page,size,orderBy) {
     return request({
         url: API_BASE_URL + "/api/solrSearchEntity/findByMaritalStatusIn?page="+page+"&size="+size+"&sort="+orderBy+",desc",

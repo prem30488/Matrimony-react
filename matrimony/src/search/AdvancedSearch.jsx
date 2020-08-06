@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
  import SolrFacetedSearch from "../components/solr-faceted-search";
  import defaultComponentPack from "../components/component-pack";
  import { SolrClient } from "../api/solr-client";
-
+import {view} from '../util/APIUtils';
 
 // export default SolrFacetedSearch;
 
@@ -15,7 +15,8 @@ import ReactDOM from 'react-dom';
 
  // The search fields and filterable facets you want
 const fields = [
-    {label: "All text fields", field: "*", type: "text"},
+    //{label: "All text fields", field: "*", type: "text"},
+    {label: "Id", field: "id", type: "text"},
     {label: "Name", field: "name", type: "text"},
     {label: "Gender", field: "sex", type: "list-facet"},
     {label: "Date of birth", field: "date_of_birth", type: "range-facet"},
@@ -24,8 +25,8 @@ const fields = [
     {label: "Religion", field: "religion", type: "list-facet"},
     {label: "Marital Status", field: "marital_status", type: "list-facet"},
     {label: "Country", field: "location", type: "list-facet"},
-    {label: "State", field: "state", type: "text"},
-    {label: "Education", field: "education", type: "text"},
+    {label: "State", field: "state", type: "list-facet"},
+    {label: "Education", field: "education", type: "list-facet"},
     {label: "Diet", field: "diet", type: "list-facet"},
     {label: "Mother Tounge", field: "mother_toung", type: "list-facet"},
     {label: "Smoking", field: "smoke", type: "list-facet"},
@@ -47,12 +48,24 @@ class AdvancedSearch extends Component {
         this.state = {
             test: false,
         };
+        this.editUser = this.editUser.bind(this);
     }
     render() {
         return (                
-                <div id="solrDiv2"></div>
+                <div id="solrDiv2">
+
+
+                </div>
         )
     }
+    editUser(id) {
+        view(id);
+        window.localStorage.setItem("profileId", id);
+        this.props.history.push('/viewProfile');
+        setTimeout(function(){
+			window.location.reload(1);
+		 }, 3000);
+    }  
     componentDidMount() { 
         this.timer = setInterval(
             () => this.setState(prevState => ({ test: !prevState.test })),
@@ -73,12 +86,16 @@ class AdvancedSearch extends Component {
               onChange: (state, handlers) =>
                   // Render the faceted search component
                   ReactDOM.render(
-                      <SolrFacetedSearch 
+                      <React.Fragment>
+                        <SolrFacetedSearch 
                           {...state}
                           {...handlers}
                           bootstrapCss={true}
-                          onSelectDoc={(doc) => console.log(doc)}
+                          onSelectDoc={(doc) => this.editUser(doc.id)}
                       />
+
+                      </React.Fragment>
+                      
                       ,
                       document.getElementById("solrDiv")
                   )
