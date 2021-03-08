@@ -64,6 +64,8 @@ class TextSearch extends React.Component {
 					<button className={cx({"btn": bootstrapCss, "btn-default": bootstrapCss, "btn-sm": bootstrapCss})} onClick={this.handleSubmit.bind(this)}>
 						<SearchIcon />
 					</button>
+					<br/>
+					<span style={{ color:"red"}}>Note: Exact match is compulsory for {label}</span>
 				</div>
 			</li>
 		);
